@@ -1,11 +1,11 @@
-import { Table, Tbody, Tr, Th } from '@chakra-ui/react';
 import React from 'react';
 
 import type { InternalTransaction } from 'types/api/internalTransaction';
 
 import { AddressHighlightProvider } from 'lib/contexts/addressHighlight';
 import { currencyUnits } from 'lib/units';
-import { default as Thead } from 'ui/shared/TheadSticky';
+import { TableBody, TableColumnHeader, TableHeaderSticky, TableRoot, TableRow } from 'toolkit/chakra/table';
+import TimeFormatToggle from 'ui/shared/time/TimeFormatToggle';
 
 import InternalTxsTableItem from './InternalTxsTableItem';
 
@@ -13,34 +13,40 @@ interface Props {
   data: Array<InternalTransaction>;
   currentAddress?: string;
   isLoading?: boolean;
+  top?: number;
+  showBlockInfo?: boolean;
 }
 
-const InternalTxsTable = ({ data, currentAddress, isLoading }: Props) => {
+const InternalTxsTable = ({ data, currentAddress, isLoading, top, showBlockInfo = true }: Props) => {
   return (
     <AddressHighlightProvider>
-      <Table>
-        <Thead top={ 68 }>
-          <Tr>
-            <Th width="15%">Parent txn hash</Th>
-            <Th width="15%">Type</Th>
-            <Th width="10%">Block</Th>
-            <Th width="40%">From/To</Th>
-            <Th width="20%" isNumeric>
+      <TableRoot minW="900px">
+        <TableHeaderSticky top={ top ?? 68 }>
+          <TableRow>
+            <TableColumnHeader width="280px">
+              Parent txn hash
+              <TimeFormatToggle/>
+            </TableColumnHeader>
+            <TableColumnHeader width="15%">Type</TableColumnHeader>
+            { showBlockInfo && <TableColumnHeader width="15%">Block</TableColumnHeader> }
+            <TableColumnHeader width="50%">From/To</TableColumnHeader>
+            <TableColumnHeader width="20%" isNumeric>
               Value { currencyUnits.ether }
-            </Th>
-          </Tr>
-        </Thead>
-        <Tbody>
+            </TableColumnHeader>
+          </TableRow>
+        </TableHeaderSticky>
+        <TableBody>
           { data.map((item, index) => (
             <InternalTxsTableItem
               key={ item.transaction_hash + '_' + index }
               { ...item }
               currentAddress={ currentAddress }
               isLoading={ isLoading }
+              showBlockInfo={ showBlockInfo }
             />
           )) }
-        </Tbody>
-      </Table>
+        </TableBody>
+      </TableRoot>
     </AddressHighlightProvider>
 
   );

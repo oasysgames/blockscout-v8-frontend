@@ -3,7 +3,7 @@ import React from 'react';
 import type { ArbitrumL2TxnWithdrawalsItem } from 'types/api/arbitrumL2';
 
 import config from 'configs/app';
-import Skeleton from 'ui/shared/chakra/Skeleton';
+import { Skeleton } from 'toolkit/chakra/skeleton';
 import AddressEntityL1 from 'ui/shared/entities/address/AddressEntityL1';
 import ListItemMobileGrid from 'ui/shared/ListItemMobile/ListItemMobileGrid';
 import ArbitrumL2MessageStatus from 'ui/shared/statusTag/ArbitrumL2MessageStatus';
@@ -29,17 +29,17 @@ const ArbitrumL2TxnWithdrawalsListItem = ({ data, isLoading, txHash }: Props) =>
 
       <ListItemMobileGrid.Label isLoading={ isLoading }>Message #</ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
-        <Skeleton isLoaded={ !isLoading }>{ data.id }</Skeleton>
+        <Skeleton loading={ isLoading }>{ data.id }</Skeleton>
       </ListItemMobileGrid.Value>
 
       <ListItemMobileGrid.Label isLoading={ isLoading }>Receiver</ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
-        <AddressEntityL1 address={{ hash: data.token?.destination || data.destination }} isLoading={ isLoading }/>
+        <AddressEntityL1 address={{ hash: data.token?.destination_address_hash || data.destination_address_hash }} isLoading={ isLoading }/>
       </ListItemMobileGrid.Value>
 
       <ListItemMobileGrid.Label isLoading={ isLoading }>Value</ListItemMobileGrid.Label>
       <ListItemMobileGrid.Value>
-        <Skeleton isLoaded={ !isLoading }>
+        <Skeleton loading={ isLoading }>
           <ArbitrumL2TxnWithdrawalsValue data={ data }/>
         </Skeleton>
       </ListItemMobileGrid.Value>

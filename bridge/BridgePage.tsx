@@ -2,7 +2,8 @@ import Image from 'next/image';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FaAngleDown } from 'react-icons/fa';
 import { useSwitchChain } from 'wagmi';
-import { Box, Flex, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
+import { useColorModeValue } from 'toolkit/chakra/color-mode';
 
 import { ChainId, TokenIndex } from './constants/types';
 

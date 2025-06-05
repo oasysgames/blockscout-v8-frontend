@@ -6,7 +6,7 @@ on:
       envs_preset:
           description: ENVs preset
           required: false
-          default: ""
+          default: main
           type: choice
           options:
             - none
@@ -21,10 +21,11 @@ on:
             - eth_sepolia
             - eth_goerli
             - filecoin
+            - immutable
+            - main
             - mekong
             - neon_devnet
             - optimism
-            - optimism_celestia
             - optimism_sepolia
             - polygon
             - rari_testnet
@@ -32,6 +33,7 @@ on:
             - shibarium
             - scroll_sepolia
             - stability
+            - tac_turin
             - zkevm
             - zilliqa_prototestnet
             - zksync
@@ -64,7 +66,7 @@ jobs:
   deploy_review:
     name: Deploy frontend
     needs: [ make_slug, publish_image ]
-    uses: blockscout/blockscout-ci-cd/.github/workflows/deploy_helmfile.yaml@master
+    uses: blockscout/actions/.github/workflows/deploy_helmfile.yaml@main
     with:
       appName: review-${{ needs.make_slug.outputs.REF_SLUG }}
       globalEnv: review

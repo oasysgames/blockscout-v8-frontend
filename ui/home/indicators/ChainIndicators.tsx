@@ -1,4 +1,4 @@
-import { Flex, Text, useColorModeValue } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import React from 'react';
 
 import type { TChainIndicator } from './types';
@@ -7,8 +7,8 @@ import type { ChainIndicatorId } from 'types/homepage';
 import config from 'configs/app';
 import useApiQuery from 'lib/api/useApiQuery';
 import { HOMEPAGE_STATS, HOMEPAGE_STATS_MICROSERVICE } from 'stubs/stats';
-import Skeleton from 'ui/shared/chakra/Skeleton';
-import Hint from 'ui/shared/Hint';
+import { Skeleton } from 'toolkit/chakra/skeleton';
+import { Hint } from 'toolkit/components/Hint/Hint';
 import IconSvg from 'ui/shared/IconSvg';
 
 import ChainIndicatorChartContainer from './ChainIndicatorChartContainer';
@@ -39,7 +39,7 @@ const ChainIndicators = () => {
 
   const queryResult = useChartDataQuery(selectedIndicatorData?.id as ChainIndicatorId);
 
-  const statsMicroserviceQueryResult = useApiQuery('stats_main', {
+  const statsMicroserviceQueryResult = useApiQuery('stats:pages_main', {
     queryOptions: {
       refetchOnMount: false,
       enabled: isStatsFeatureEnabled,
@@ -47,14 +47,12 @@ const ChainIndicators = () => {
     },
   });
 
-  const statsApiQueryResult = useApiQuery('stats', {
+  const statsApiQueryResult = useApiQuery('general:stats', {
     queryOptions: {
       refetchOnMount: false,
       placeholderData: HOMEPAGE_STATS,
     },
   });
-
-  const bgColor = useColorModeValue('gray.50', 'whiteAlpha.100');
 
   if (indicators.length === 0) {
     return null;
@@ -86,7 +84,7 @@ const ChainIndicators = () => {
 
   const valueTitle = (() => {
     if (isPlaceholderData) {
-      return <Skeleton h="36px" w="215px"/>;
+      return <Skeleton loading h="36px" w="215px"/>;
     }
 
     if (!hasData) {
@@ -108,7 +106,7 @@ const ChainIndicators = () => {
     const diffColor = indicatorValueDiff >= 0 ? 'green.500' : 'red.500';
 
     return (
-      <Skeleton isLoaded={ !statsApiQueryResult.isPlaceholderData } display="flex" alignItems="center" color={ diffColor } ml={ 2 }>
+      <Skeleton loading={ statsApiQueryResult.isPlaceholderData } display="flex" alignItems="center" color={ diffColor } ml={ 2 }>
         <IconSvg name="arrows/up-head" boxSize={ 5 } mr={ 1 } transform={ indicatorValueDiff < 0 ? 'rotate(180deg)' : 'rotate(0)' }/>
         <Text color={ diffColor } fontWeight={ 600 }>{ indicatorValueDiff }%</Text>
       </Skeleton>
@@ -120,7 +118,7 @@ const ChainIndicators = () => {
       px={{ base: 3, lg: 4 }}
       py={ 3 }
       borderRadius="base"
-      bgColor={ bgColor }
+      bgColor={{ _light: 'gray.50', _dark: 'whiteAlpha.100' }}
       columnGap={{ base: 3, lg: 4 }}
       rowGap={ 0 }
       flexBasis="50%"
@@ -128,10 +126,10 @@ const ChainIndicators = () => {
       alignItems="stretch"
     >
       <Flex flexGrow={ 1 } flexDir="column">
-        <Flex alignItems="center">
+        <Skeleton loading={ isPlaceholderData } display="flex" alignItems="center" w="fit-content" columnGap={ 1 }>
           <Text fontWeight={ 500 }>{ title }</Text>
-          { hint && <Hint label={ hint } ml={ 1 }/> }
-        </Flex>
+          { hint && <Hint label={ hint }/> }
+        </Skeleton>
         <Flex mb={{ base: 0, lg: 2 }} mt={ 1 } alignItems="end">
           { valueTitle }
           { valueDiff }

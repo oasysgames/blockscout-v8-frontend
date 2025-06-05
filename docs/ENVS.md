@@ -2,11 +2,16 @@
 
 The app instance can be customized by passing the following variables to the Node.js environment at runtime. Some of these variables have been deprecated, and their full list can be found in the [file](./DEPRECATED_ENVS.md).
 
-**IMPORTANT NOTE!** For _production_ build purposes all json-like values should be single-quoted. If it contains a hash (`#`) or a dollar-sign (`$`) the whole value should be wrapped in single quotes as well (see `dotenv` [readme](https://github.com/bkeepers/dotenv#variable-substitution) for the reference)
+## Read before you run the app
 
-## Disclaimer about using variables
+### Variables compulsoriness
+Please note that in the tables below, the "Compulsoriness" column indicates whether the variable is required for starting up the application, except for the "App Features" section. All features are optional by definition; therefore, the "Compulsoriness" column indicates whether a certain variable is required or optional only within the context of that feature, not for the entire application.
 
-Please be aware that all environment variables prefixed with `NEXT_PUBLIC_` will be exposed to the browser. So any user can obtain its values. Make sure that for all 3rd-party services keys (e.g., Sentri, Auth0, WalletConnect, etc.) in the services administration panel you have created a whitelist of allowed origins and have added your app domain into it. That will help you prevent using your key by unauthorized app, if someone gets its value.
+### Disclaimer about using variables
+Please be aware that all environment variables prefixed with `NEXT_PUBLIC_` will be exposed to the browser. So any user can obtain its values. Make sure that for all 3rd-party services keys (e.g., Auth0, WalletConnect, etc.) in the services administration panel you have created a whitelist of allowed origins and have added your app domain into it. That will help you prevent using your key by unauthorized app, if someone gets its value.
+
+### Note about escaping variables values
+All json-like values should be single-quoted. If it contains a hash (`#`) or a dollar-sign (`$`) the whole value should be wrapped in single quotes as well (see `dotenv` [readme](https://github.com/bkeepers/dotenv#variable-substitution) for the reference)
 
 &nbsp;
 
@@ -58,6 +63,8 @@ Please be aware that all environment variables prefixed with `NEXT_PUBLIC_` will
   - [Address profile API](ENVS.md#address-profile-api)
   - [Address XStar XHS score](ENVS.md#address-xstar-xhs-score)
   - [SUAVE chain](ENVS.md#suave-chain)
+  - [Celo chain](ENVS.md#celo-chain)
+  - [Ton Application Chain (TAC)](ENVS.md#ton-application-chain-tac)
   - [MetaSuites extension](ENVS.md#metasuites-extension)
   - [Validators list](ENVS.md#validators-list)
   - [Sentry error monitoring](ENVS.md#sentry-error-monitoring)
@@ -332,9 +339,13 @@ Settings for meta tags, OG tags and SEO
 | logo | `string` | URL to explorer logo file. Should be at least 40x40. | - | - | `'https://foo.app/icon.png'` |
 | title | `string` | Displayed name of the explorer | Required | - | `Anyblock` |
 | baseUrl | `string` | Base url of the explorer | Required | - | `https://explorer.anyblock.tools` |
-| paths | `Record<'tx' \| 'block' \| 'address' \| 'token', string>` | Map of explorer entities and their paths | Required | - | `{'tx':'/ethereum/poa/core/tx'}` |
+| paths | `Record<'tx' \| 'block' \| 'address' \| 'token', string>` | Map of explorer entities and their paths. Path can be a template with `:id` or `:id_lowercase` param, or a string (see note below) | Required | - | `{'tx':'/ethereum/poa/core/tx'}` |
 
-*Note* The url of an entity will be constructed as `<baseUrl><paths[<entity-type>]><entity-id>`, e.g `https://explorer.anyblock.tools/ethereum/poa/core/tx/<tx-id>`
+*Note* If a path template contains `:id` or `:id_lowercase`, it will be replaced with the entity-id in its original case or lowercased respectively. If neither parameter is present, the entity-id will be appended to the end of the path in lowercase. For example, with baseUrl `https://explorer.anyblock.tools`:
+- Path `{'tx':'/ethereum/poa/core/tx/:id/details'}` and entity-id `0x123...AbC` results in `https://explorer.anyblock.tools/ethereum/poa/core/tx/0x123...AbC/details`
+- Path `{'tx':'/ethereum/poa/core/tx/:id_lowercase/details'}` and entity-id `0x123...AbC` results in `https://explorer.anyblock.tools/ethereum/poa/core/tx/0x123...abc/details`
+- Path `{'tx':'/ethereum/poa/core/tx'}` and entity-id `0x123...AbC` results in `https://explorer.anyblock.tools/ethereum/poa/core/tx/0x123...abc`
+
 
 #### Contract code IDE configuration properties
 
@@ -355,7 +366,7 @@ Settings for meta tags, OG tags and SEO
 
 ## App features
 
-*Note* The variables which are marked as required should be passed as described in order to enable the particular feature, but they are not required in the whole app context.
+*Note* The variables which are marked as required should be passed as described in order to enable the particular feature, but they are not required in the entire app context.
 
 ### My account
 
@@ -419,11 +430,10 @@ This feature is **enabled by default**. To switch it off pass `NEXT_PUBLIC_ADVAN
 ### Banner ads
 
 This feature is **enabled by default** with the `slise` ads provider. To switch it off pass `NEXT_PUBLIC_AD_BANNER_PROVIDER=none`.
-*Note* that the `getit` ad provider is temporary disabled.
 
 | Variable | Type| Description | Compulsoriness  | Default value | Example value | Version |
 | --- | --- | --- | --- | --- | --- | --- |
-| NEXT_PUBLIC_AD_BANNER_PROVIDER | `slise` \| `adbutler` \| `coinzilla` \|  `hype` \| `getit` \| `none` | Ads provider  | - | `slise` | `coinzilla` | v1.0.x+ |
+| NEXT_PUBLIC_AD_BANNER_PROVIDER | `slise` \| `adbutler` \| `coinzilla` \|  `hype` \| `none` | Ads provider  | - | `slise` | `coinzilla` | v1.0.x+ |
 | NEXT_PUBLIC_AD_BANNER_ADDITIONAL_PROVIDER | `adbutler` | Additional ads provider to mix with the main one | - | - | `adbutler` | v1.28.0+ |
 | NEXT_PUBLIC_AD_ADBUTLER_CONFIG_DESKTOP | `{ id: string; width: string; height: string }` | Placement config for desktop Adbutler banner | - | - | `{'id':'123456','width':'728','height':'90'}` | v1.3.0+ |
 | NEXT_PUBLIC_AD_ADBUTLER_CONFIG_MOBILE | `{ id: string; width: number; height: number }` | Placement config for mobile Adbutler banner | - | - | `{'id':'654321','width':'300','height':'100'}` | v1.3.0+ |
@@ -464,13 +474,16 @@ This feature is **enabled by default** with the `coinzilla` ads provider. To swi
 | NEXT_PUBLIC_ROLLUP_TYPE | `'optimistic' \| 'arbitrum' \| 'shibarium' \| 'zkEvm' \| 'zkSync' \| 'scroll'` | Rollup chain type | Required | - | `'optimistic'` | v1.24.0+ |
 | NEXT_PUBLIC_ROLLUP_L1_BASE_URL | `string` | Blockscout base URL for L1 network. **DEPRECATED** _Use `NEXT_PUBLIC_ROLLUP_PARENT_CHAIN` instead_ | Required | - | `'http://eth-goerli.blockscout.com'` | v1.24.0+ |
 | NEXT_PUBLIC_ROLLUP_L2_WITHDRAWAL_URL | `string` | URL for L2 -> L1 withdrawals (Optimistic stack only) | Required for `optimistic` rollups | - | `https://app.optimism.io/bridge/withdraw` | v1.24.0+ |
+| NEXT_PUBLIC_ROLLUP_STAGE_INDEX | `1 \| 2` | Reflects the maturity and decentralization level of the chain based on [L2BEAT's framework](https://medium.com/l2beat/introducing-stages-a-framework-to-evaluate-rollups-maturity-d290bb22befe). The label will be added to the sidebar according to the provided stage index. Not applicable for testnets. | - | - | `1` | v2.1.0+ |
 | NEXT_PUBLIC_FAULT_PROOF_ENABLED | `boolean` | Set to `true` for chains with fault proof system enabled (Optimistic stack only) | - | - | `true` | v1.31.0+ |
 | NEXT_PUBLIC_HAS_MUD_FRAMEWORK | `boolean` | Set to `true` for instances that use MUD framework (Optimistic stack only) | - | - | `true` | v1.33.0+ |
+| NEXT_PUBLIC_INTEROP_ENABLED | `boolean` | Enables "Interop messages" page (Optimistic stack only)  | - | `false` | `true` | v1.39.0+ |
 | NEXT_PUBLIC_ROLLUP_HOMEPAGE_SHOW_LATEST_BLOCKS | `boolean` | Set to `true` to display "Latest blocks" widget instead of "Latest batches" on the home page | - | - | `true` | v1.36.0+ |
 | NEXT_PUBLIC_ROLLUP_OUTPUT_ROOTS_ENABLED | `boolean` | Enables "Output roots" page (Optimistic stack only)  | - | `false` | `true` | v1.37.0+ |
 | NEXT_PUBLIC_ROLLUP_PARENT_CHAIN_NAME | `string` | Set to customize L1 transaction status labels in the UI (e.g., "Sent to <chain-name>"). This setting is applicable only for Arbitrum-based chains. **DEPRECATED** _Use `NEXT_PUBLIC_ROLLUP_PARENT_CHAIN` instead_ | - | - | `DuckChain` | v1.37.0+ |
 | NEXT_PUBLIC_ROLLUP_PARENT_CHAIN | `ParentChain`, see details [below](#parent-chain-configuration-properties) | Configuration parameters for the parent chain. | - | - | `{'baseUrl':'https://explorer.duckchain.io'}` | v1.38.0+ |
 | NEXT_PUBLIC_ROLLUP_DA_CELESTIA_NAMESPACE | `string` | Hex-string for creating a link to the transaction batch on the Seleneium explorer. "0x"-format and 60 symbol length. Available only for Arbitrum roll-ups. | - | - | `0x00000000000000000000000000000000000000ca1de12a9905be97beaf` | v1.38.0+ |
+| NEXT_PUBLIC_ROLLUP_DA_CELESTIA_CELENIUM_URL | `string` | URL for the Selenium explorer. It is used to create links to the Data Availability Blobs page. The URL should contain the full path without any search parameters related to the blob, as these will be constructed at runtime for each blob separately. Available only for Optimistic or Arbitrum roll-ups. | - | - | `https://mocha.celenium.io/blob` | v2.0.2+ |
 
 #### Parent chain configuration properties
 
@@ -768,6 +781,17 @@ For blockchains that use the Celo platform. _Note_, that once the Celo mainnet b
 
 &nbsp;
 
+### Ton Application Chain (TAC)
+
+For Ton Application Chains, this feature enables additional views, such as a list of cross-chain operations and a detailed page for a specific cross-chain operation, as well as extra fields on the transaction page.
+
+| Variable | Type| Description | Compulsoriness  | Default value | Example value | Version |
+| --- | --- | --- | --- | --- | --- | --- |
+| NEXT_PUBLIC_TAC_OPERATION_LIFECYCLE_API_HOST | `string` | URL for the TAC Operation Lifecycle service. | Required | - | `https://tac-operation-lifecycle.blockscout.com` | v2.1.0+ |
+| NEXT_PUBLIC_TAC_TON_EXPLORER_URL | `string` | URL of the Ton chain explorer. This is used to build links to transactions and addresses on the Ton chain. | Required | - | `https://tonscan.org` | v2.1.0+ |
+
+&nbsp;
+
 ### MetaSuites extension
 
 Enables [MetaSuites browser extension](https://github.com/blocksecteam/metasuites) to integrate with the app views.
@@ -911,7 +935,7 @@ This feature enables Blockscout Merits program. It requires that the [My account
 
 ### Google ReCaptcha
 
-For obtaining the variables values please refer to [reCAPTCHA documentation](https://developers.google.com/recaptcha).
+To obtain the variable values, please refer to the [reCAPTCHA documentation](https://developers.google.com/recaptcha) and check the [Blockscout reCAPTCHA config docs](https://docs.blockscout.com/setup/configuration-options/recaptcha). Please note that we currently support only **reCAPTCHA v2 in invisible mode**, read more [here](https://developers.google.com/recaptcha/docs/versions#recaptcha_v2_invisible_recaptcha_badge).
 
 | Variable | Type| Description | Compulsoriness  | Default value | Example value | Version |
 | --- | --- | --- | --- | --- | --- | --- |

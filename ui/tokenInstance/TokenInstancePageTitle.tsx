@@ -5,14 +5,14 @@ import type { TokenInfo, TokenInstance } from 'types/api/token';
 
 import config from 'configs/app';
 import { useAppContext } from 'lib/contexts/app';
-import * as regexp from 'lib/regexp';
 import { getTokenTypeName } from 'lib/token/tokenTypes';
+import { Link } from 'toolkit/chakra/link';
+import { Tag } from 'toolkit/chakra/tag';
+import * as regexp from 'toolkit/utils/regexp';
 import AddressQrCode from 'ui/address/details/AddressQrCode';
 import AccountActionsMenu from 'ui/shared/AccountActionsMenu/AccountActionsMenu';
 import AddressAddToWallet from 'ui/shared/address/AddressAddToWallet';
-import Tag from 'ui/shared/chakra/Tag';
 import TokenEntity from 'ui/shared/entities/token/TokenEntity';
-import LinkExternal from 'ui/shared/links/LinkExternal';
 import PageTitle from 'ui/shared/Page/PageTitle';
 
 interface Props {
@@ -39,7 +39,7 @@ const TokenInstancePageTitle = ({ isLoading, token, instance, hash }: Props) => 
       let tokenName = token.name;
       // in case tokens is updated name
       const updatedAddress = config.verse.tokens.updatedAddress.toLowerCase();
-      if (updatedAddress.length > 0 && token.address.toLowerCase().includes(updatedAddress)) {
+      if (updatedAddress.length > 0 && token.address_hash.toLowerCase().includes(updatedAddress)) {
         tokenName = config.verse.tokens.updatedName;
         symbol = config.verse.tokens.updatedSymbol;
       }
@@ -62,7 +62,7 @@ const TokenInstancePageTitle = ({ isLoading, token, instance, hash }: Props) => 
     };
   }, [ appProps.referrer, hash ]);
 
-  const tokenTag = token ? <Tag isLoading={ isLoading }>{ getTokenTypeName(token.type) }</Tag> : null;
+  const tokenTag = token ? <Tag loading={ isLoading }>{ getTokenTypeName(token.type) }</Tag> : null;
 
   const appLink = (() => {
     if (!instance?.external_app_url) {
@@ -75,15 +75,15 @@ const TokenInstancePageTitle = ({ isLoading, token, instance, hash }: Props) => 
         new URL('https://' + instance.external_app_url);
 
       return (
-        <LinkExternal href={ url.toString() } variant="subtle" isLoading={ isLoading } ml={{ base: 0, lg: 'auto' }}>
+        <Link external href={ url.toString() } variant="underlaid" loading={ isLoading } ml={{ base: 0, lg: 'auto' }}>
           { url.hostname || instance.external_app_url }
-        </LinkExternal>
+        </Link>
       );
     } catch (error) {
       return (
-        <LinkExternal href={ instance.external_app_url } isLoading={ isLoading } ml={{ base: 0, lg: 'auto' }}>
+        <Link external href={ instance.external_app_url } variant="underlaid" loading={ isLoading } ml={{ base: 0, lg: 'auto' }}>
           View in app
-        </LinkExternal>
+        </Link>
       );
     }
   })();
@@ -105,15 +105,13 @@ const TokenInstancePageTitle = ({ isLoading, token, instance, hash }: Props) => 
           noSymbol
           noCopy
           jointSymbol
-          fontFamily="heading"
-          fontSize="lg"
-          fontWeight={ 500 }
+          variant="subheading"
           w="auto"
           maxW="700px"
         />
       ) }
-      { !isLoading && <AddressAddToWallet token={ token } tokenId={ instance?.id } variant="button"/> }
-      <AddressQrCode address={ address } isLoading={ isLoading }/>
+      { !isLoading && token && <AddressAddToWallet token={ token } tokenId={ instance?.id } variant="button"/> }
+      <AddressQrCode hash={ address.hash } isLoading={ isLoading }/>
       <AccountActionsMenu isLoading={ isLoading } showUpdateMetadataItem/>
       { appLink }
     </Flex>

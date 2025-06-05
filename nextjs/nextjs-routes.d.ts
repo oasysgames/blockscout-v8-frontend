@@ -26,7 +26,6 @@ declare module "nextjs-routes" {
     | StaticRoute<"/api/metrics">
     | StaticRoute<"/api/monitoring/invalid-api-schema">
     | StaticRoute<"/api/proxy">
-    | StaticRoute<"/api/sprite">
     | StaticRoute<"/api-docs">
     | DynamicRoute<"/apps/[id]", { "id": string }>
     | StaticRoute<"/apps">
@@ -40,6 +39,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/block/countdown">
     | StaticRoute<"/blocks">
     | StaticRoute<"/bridge">
+    | StaticRoute<"/chakra">
     | StaticRoute<"/contract-verification">
     | StaticRoute<"/csv-export">
     | StaticRoute<"/deposits">
@@ -50,11 +50,14 @@ declare module "nextjs-routes" {
     | StaticRoute<"/graphiql">
     | StaticRoute<"/">
     | StaticRoute<"/internal-txs">
+    | StaticRoute<"/interop-messages">
     | StaticRoute<"/login">
     | StaticRoute<"/mud-worlds">
     | DynamicRoute<"/name-domains/[name]", { "name": string }>
     | StaticRoute<"/name-domains">
     | DynamicRoute<"/op/[hash]", { "hash": string }>
+    | DynamicRoute<"/operation/[id]", { "id": string }>
+    | StaticRoute<"/operations">
     | StaticRoute<"/ops">
     | StaticRoute<"/output-roots">
     | DynamicRoute<"/pools/[hash]", { "hash": string }>

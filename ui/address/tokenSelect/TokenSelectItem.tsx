@@ -1,4 +1,4 @@
-import { chakra, Flex, useColorModeValue } from '@chakra-ui/react';
+import { chakra, Flex } from '@chakra-ui/react';
 import BigNumber from 'bignumber.js';
 import React from 'react';
 
@@ -6,8 +6,8 @@ import { route } from 'nextjs-routes';
 
 import config from 'configs/app';
 import getCurrencyValue from 'lib/getCurrencyValue';
+import { Link } from 'toolkit/chakra/link';
 import TokenEntity from 'ui/shared/entities/token/TokenEntity';
-import LinkInternal from 'ui/shared/links/LinkInternal';
 import TruncatedValue from 'ui/shared/TruncatedValue';
 
 import type { TokenEnhancedData } from '../utils/tokenUtils';
@@ -20,14 +20,14 @@ const TokenSelectItem = ({ data }: Props) => {
   let symbol = data.token.symbol;
   // in case tokens is updated name
   const updatedAddress = config.verse.tokens.updatedAddress.toLowerCase();
-  if (updatedAddress.length > 0 && data.token.address.toLowerCase().includes(updatedAddress)) {
+  if (updatedAddress.length > 0 && data.token.address_hash.toLowerCase().includes(updatedAddress)) {
     symbol = config.verse.tokens.updatedSymbol;
   }
 
   const secondRow = (() => {
     switch (data.token.type) {
       case 'ERC-20': {
-        const tokenDecimals = Number(data.token.decimals) || 18;
+        const tokenDecimals = Number(data.token.decimals ?? 18);
         const text = `${ BigNumber(data.value).dividedBy(10 ** tokenDecimals).dp(8).toFormat() } ${ symbol || '' }`;
 
         return (
@@ -75,19 +75,19 @@ const TokenSelectItem = ({ data }: Props) => {
     }
   })();
 
-  const url = route({ pathname: '/token/[hash]', query: { hash: data.token.address } });
+  const url = route({ pathname: '/token/[hash]', query: { hash: data.token.address_hash } });
 
   return (
-    <LinkInternal
+    <Link
       px={ 1 }
       py="10px"
       display="flex"
       flexDir="column"
       rowGap={ 2 }
-      borderColor="divider"
+      borderColor="border.divider"
       borderBottomWidth="1px"
       _hover={{
-        bgColor: useColorModeValue('blue.50', 'gray.800'),
+        bgColor: { _light: 'blue.50', _dark: 'gray.800' },
       }}
       color="unset"
       fontSize="sm"
@@ -109,7 +109,7 @@ const TokenSelectItem = ({ data }: Props) => {
       <Flex alignItems="center" justifyContent="space-between" w="100%" whiteSpace="nowrap">
         { secondRow }
       </Flex>
-    </LinkInternal>
+    </Link>
   );
 };
 

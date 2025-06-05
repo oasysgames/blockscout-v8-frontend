@@ -1,5 +1,5 @@
 import React from 'react';
-import { useColorModeValue } from '@chakra-ui/react';
+import { useColorModeValue } from 'toolkit/chakra/color-mode';
 
 import ChartWidget from 'ui/shared/chart/ChartWidget';
 import type { TimeChartItem } from 'ui/shared/chart/types';

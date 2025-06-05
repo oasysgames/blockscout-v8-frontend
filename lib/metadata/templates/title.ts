@@ -63,10 +63,14 @@ const TEMPLATE_MAP: Record<Route['pathname'], string> = {
   '/advanced-filter': '%network_name% advanced filter',
   '/pools': '%network_name% DEX pools',
   '/pools/[hash]': '%network_name% pool details',
+  '/interop-messages': '%network_name% interop messages',
+  '/operations': '%network_name% operations',
+  '/operation/[id]': '%network_name% operation %id%',
 
   // service routes, added only to make typescript happy
   '/login': '%network_name% login',
   '/sprite': '%network_name% SVG sprite',
+  '/chakra': '%network_name% Chakra UI showcase',
   '/api/metrics': '%network_name% node API prometheus metrics',
   '/api/monitoring/invalid-api-schema': '%network_name% node API prometheus metrics',
   '/api/log': '%network_name% node API request log',
@@ -75,12 +79,11 @@ const TEMPLATE_MAP: Record<Route['pathname'], string> = {
   '/api/csrf': '%network_name% node API CSRF token',
   '/api/healthz': '%network_name% node API health check',
   '/api/config': '%network_name% node API app config',
-  '/api/sprite': '%network_name% node API SVG sprite content',
 };
 
 const TEMPLATE_MAP_ENHANCED: Partial<Record<Route['pathname'], string>> = {
-  '/token/[hash]': '%network_name% %symbol% token details',
-  '/token/[hash]/instance/[id]': '%network_name% token instance for %symbol%',
+  '/token/[hash]': '%network_name% %symbol_or_name% token details',
+  '/token/[hash]/instance/[id]': '%network_name% token instance for %symbol_or_name%',
   '/apps/[id]': '%network_name% - %app_name%',
   '/address/[hash]': '%network_name% address details for %domain_name%',
   '/stats/[id]': '%title% chart on %network_name%',

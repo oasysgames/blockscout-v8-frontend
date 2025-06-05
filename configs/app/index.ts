@@ -1,4 +1,4 @@
-import api from './api';
+import apis from './apis';
 import app from './app';
 import chain from './chain';
 import * as features from './features';
@@ -10,7 +10,7 @@ import verse from './verse';
 const config = Object.freeze({
   app,
   chain,
-  api,
+  apis,
   UI,
   features,
   services,

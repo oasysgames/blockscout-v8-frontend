@@ -5,7 +5,7 @@ import type * as stats from '@blockscout/stats-types';
 import type { StatsIntervalIds } from 'types/client/stats';
 
 import ChartIntervalSelect from 'ui/shared/chart/ChartIntervalSelect';
-import FilterInput from 'ui/shared/filters/FilterInput';
+import { FilterInput } from 'toolkit/components/filters/FilterInput';
 
 import ExperimentDropdownMenu from './ExperimentDropdownMenu';
 
@@ -72,11 +72,11 @@ const ExperimentFilters = ({
       >
         <FilterInput
           key={ initialFilterValue }
-          isLoading={ isLoading }
+          loading={ isLoading }
           onChange={ onFilterInputChange }
           placeholder="Find verse, chart..."
           initialValue={ initialFilterValue }
-          size="xs"
+          size="sm"
         />
       </GridItem>
     </Grid>

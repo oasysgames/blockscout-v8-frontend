@@ -19,10 +19,10 @@ export interface ValidatorsStabilityResponse {
 }
 
 export interface ValidatorsStabilityCountersResponse {
-  active_validators_counter: string;
+  active_validators_count: string;
   active_validators_percentage: number;
-  new_validators_counter_24h: string;
-  validators_counter: string;
+  new_validators_count_24h: string;
+  validators_count: string;
 }
 
 export interface ValidatorsStabilityFilters {
@@ -37,7 +37,7 @@ export interface ValidatorsStabilitySorting {
 
 export type ValidatorsStabilitySortingField = ValidatorsStabilitySorting['sort'];
 
-export type ValidatorsStabilitySortingValue = `${ ValidatorsStabilitySortingField }-${ ValidatorsStabilitySorting['order'] }`;
+export type ValidatorsStabilitySortingValue = `${ ValidatorsStabilitySortingField }-${ ValidatorsStabilitySorting['order'] }` | 'default';
 
 // Blackfort
 
@@ -57,8 +57,8 @@ export interface ValidatorsBlackfortResponse {
 }
 
 export interface ValidatorsBlackfortCountersResponse {
-  new_validators_counter_24h: string;
-  validators_counter: string;
+  new_validators_count_24h: string;
+  validators_count: string;
 }
 
 export interface ValidatorsBlackfortSorting {
@@ -68,7 +68,7 @@ export interface ValidatorsBlackfortSorting {
 
 export type ValidatorsBlackfortSortingField = ValidatorsBlackfortSorting['sort'];
 
-export type ValidatorsBlackfortSortingValue = `${ ValidatorsBlackfortSortingField }-${ ValidatorsBlackfortSorting['order'] }`;
+export type ValidatorsBlackfortSortingValue = `${ ValidatorsBlackfortSortingField }-${ ValidatorsBlackfortSorting['order'] }` | 'default';
 
 // Zilliqa
 export interface ValidatorsZilliqaItem {

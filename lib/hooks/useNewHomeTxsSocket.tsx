@@ -43,7 +43,7 @@ function assertIsNewPendingTxResponse(response: unknown): response is { pending_
 export default function useNewHomeTxsSocket() {
   const router = useRouter();
   const [ num, setNum ] = useGradualIncrement(0);
-  const [ socketAlert, setSocketAlert ] = React.useState('');
+  const [ alertText, setAlertText ] = React.useState('');
 
   const { topic, event } = getSocketParams(router);
 
@@ -57,11 +57,11 @@ export default function useNewHomeTxsSocket() {
   }, [ setNum ]);
 
   const handleSocketClose = React.useCallback(() => {
-    setSocketAlert('Connection is lost. Please reload page.');
+    setAlertText('Connection is lost. Please reload page.');
   }, []);
 
   const handleSocketError = React.useCallback(() => {
-    setSocketAlert('An error has occurred while fetching new transactions. Please reload page.');
+    setAlertText('An error has occurred while fetching new transactions. Please reload page.');
   }, []);
 
   const channel = useSocketChannel({
@@ -81,5 +81,5 @@ export default function useNewHomeTxsSocket() {
     return {};
   }
 
-  return { num, socketAlert };
+  return { num, alertText };
 }

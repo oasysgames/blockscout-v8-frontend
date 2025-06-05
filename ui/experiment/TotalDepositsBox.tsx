@@ -1,4 +1,5 @@
-import { Box, Flex, Text, Skeleton, useColorModeValue } from '@chakra-ui/react';
+import { Box, Flex, Text, Skeleton } from '@chakra-ui/react';
+import { useColorModeValue } from 'toolkit/chakra/color-mode';
 import React from 'react';
 
 interface DailyBridgeStat {
