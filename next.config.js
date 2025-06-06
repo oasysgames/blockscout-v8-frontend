@@ -12,6 +12,7 @@ const rewrites = require('./nextjs/rewrites');
 
 /** @type {import('next').NextConfig} */
 const moduleExports = {
+  pageExtensions: ['tsx', 'ts', 'jsx', 'js', 'bridge.tsx'],
   transpilePackages: [
     'react-syntax-highlighter',
     'swagger-client',
@@ -25,6 +26,10 @@ const moduleExports = {
       {
         test: /\.svg$/,
         use: [ '@svgr/webpack' ],
+      },
+      {
+        test: /\.json$/,
+        type: 'json',
       },
     );
     config.resolve.fallback = { 

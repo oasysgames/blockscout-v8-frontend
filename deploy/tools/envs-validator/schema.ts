@@ -732,6 +732,7 @@ const schema = yup
     NEXT_PUBLIC_NETWORK_CURRENCY_NAME: yup.string(),
     NEXT_PUBLIC_NETWORK_CURRENCY_WEI_NAME: yup.string(),
     NEXT_PUBLIC_NETWORK_CURRENCY_SYMBOL: yup.string(),
+    NEXT_PUBLIC_NETWORK_CURRENCY_IMAGE: yup.string(),
     NEXT_PUBLIC_NETWORK_CURRENCY_DECIMALS: yup.number().integer().positive(),
     NEXT_PUBLIC_NETWORK_SECONDARY_COIN_SYMBOL: yup.string(),
     NEXT_PUBLIC_NETWORK_MULTIPLE_GAS_CURRENCIES: yup.boolean(),
@@ -812,9 +813,7 @@ const schema = yup
         }),
 
     // Custom tokens
-    NEXT_PUBLIC_TOKENS_UPDATED_ADDRESS: yup.string(),
-    NEXT_PUBLIC_TOKENS_UPDATED_NAME: yup.string(),
-    NEXT_PUBLIC_TOKENS_UPDATED_SYMBOL: yup.string(),
+    NEXT_PUBLIC_UPDATED_TOKENS: yup.string(),
     
     //     b. sidebar
     NEXT_PUBLIC_FEATURED_NETWORKS: yup
@@ -959,6 +958,7 @@ const schema = yup
       }),
     NEXT_PUBLIC_STATS_API_HOST: yup.string().test(urlTest),
     NEXT_PUBLIC_STATS_API_BASE_PATH: yup.string(),
+    NEXT_PUBLIC_EXPERIMENT_VISIBLE: yup.boolean(),
     NEXT_PUBLIC_EXPERIMENT_API_URL: yup.string().test(urlTest),
     NEXT_PUBLIC_VISUALIZE_API_HOST: yup.string().test(urlTest),
     NEXT_PUBLIC_VISUALIZE_API_BASE_PATH: yup.string(),
