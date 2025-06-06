@@ -89,10 +89,13 @@ const TokenDetails = ({ tokenQuery }: Props) => {
 
   let totalSupplyValue;
   let symbolTxt = symbol;
-  // in case tokens is updated name
-  const updatedAddress = config.verse.tokens.updatedAddress.toLowerCase();
-  if (updatedAddress.length > 0 && tokenQuery.data?.address_hash.toLowerCase().includes(updatedAddress)) {
-    symbolTxt = config.verse.tokens.updatedSymbol;
+
+  // Check if the token address exists in the tokens list
+  if (tokenQuery.data) {
+    const updatedToken = config.verse.tokens.findByAddress(tokenQuery.data?.address_hash);
+    if (updatedToken) {
+      symbolTxt = updatedToken.symbol;
+    }
   }
 
   if (decimals) {

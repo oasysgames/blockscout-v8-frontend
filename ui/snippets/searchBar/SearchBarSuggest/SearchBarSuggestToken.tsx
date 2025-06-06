@@ -17,11 +17,14 @@ const SearchBarSuggestToken = ({ data, isMobile, searchTerm, addressFormat }: It
   const verifiedIcon = <IconSvg name="certified" boxSize={ 4 } color="green.500" ml={ 1 } flexShrink={ 0 }/>;
   let symbol = data.symbol;
   let tokenName = data.name;
-  // in case tokens is updated name
-  const updatedAddress = config.verse.tokens.updatedAddress.toLowerCase();
-  if (updatedAddress.length > 0 && data.address_hash.toLowerCase().includes(updatedAddress)) {
-    tokenName = config.verse.tokens.updatedName;
-    symbol = config.verse.tokens.updatedSymbol;
+  
+  // Check if the token address exists in the tokens list
+  if (data.address_hash) {
+    const updatedToken = config.verse.tokens.findByAddress(data.address_hash);
+    if (updatedToken) {
+      tokenName = updatedToken.name;
+      symbol = updatedToken.symbol;
+    }
   }
 
   const certifiedIcon = <ContractCertifiedLabel iconSize={ 4 } boxSize={ 4 } ml={ 1 } flexShrink={ 0 }/>;
@@ -34,7 +37,7 @@ const SearchBarSuggestToken = ({ data, isMobile, searchTerm, addressFormat }: It
       whiteSpace="nowrap"
       textOverflow="ellipsis"
     >
-      <span dangerouslySetInnerHTML={{ __html: highlightText(data.name + (symbol ? ` (${ symbol })` : ''), searchTerm) }}/>
+      <span dangerouslySetInnerHTML={{ __html: highlightText(tokenName + (symbol ? ` (${ symbol })` : ''), searchTerm) }}/>
     </Text>
   );
 

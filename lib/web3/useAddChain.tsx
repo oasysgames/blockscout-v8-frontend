@@ -1,10 +1,10 @@
+import { get } from 'es-toolkit/compat';
 import React from 'react';
 import type { AddEthereumChainParameter } from 'viem';
 
 import config from 'configs/app';
-import { SECOND } from 'toolkit/utils/consts';
+import getErrorObj from 'lib/errors/getErrorObj';
 
-import useRewardsActivity from '../hooks/useRewardsActivity';
 import useProvider from './useProvider';
 import { getHexadecimalChainId } from './utils';
 
@@ -28,23 +28,29 @@ function getParams(): AddEthereumChainParameter {
 
 export default function useAddChain() {
   const { wallet, provider } = useProvider();
-  const { trackUsage } = useRewardsActivity();
 
   return React.useCallback(async() => {
     if (!wallet || !provider) {
       throw new Error('Wallet or provider not found');
     }
 
-    const start = Date.now();
+    try {
+      return await provider.request({
+        method: 'wallet_addEthereumChain',
+        params: [ getParams() ],
+      });
+    } catch (error) {
+      const errorObj = getErrorObj(error);
+      const code = get(errorObj, 'code');
+      if (code === -32603) {
+        console.warn('Chain already added or not supported');
+        return;
+      }
 
-    await provider.request({
-      method: 'wallet_addEthereumChain',
-      params: [ getParams() ],
-    });
-
-    // if network is already added, the promise resolves immediately
-    if (Date.now() - start > SECOND) {
-      await trackUsage('add_network');
+      // Throw error
+      if (code !== -32603) {
+        throw error;
+      }
     }
-  }, [ wallet, provider, trackUsage ]);
+  }, [ wallet, provider ]);
 }

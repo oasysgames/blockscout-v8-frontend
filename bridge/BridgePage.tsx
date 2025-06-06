@@ -51,7 +51,7 @@ const BridgePage = () => {
     switchChainAsync({ chainId })
   }, [isDeposit])
 
-  const [ deposit, withdraw, loading, hash, error ] = useDepositWithdraw(verseVersion ? 1 : 0);
+  const [ deposit, withdraw, loading, hash, error ] = useDepositWithdraw(verseVersion ? 1 : 0, isDeposit ? ChainId.OASYS : l2ChainId);
 
   const doBridge = useCallback(() => {
     if (isDeposit) {
@@ -118,7 +118,7 @@ const BridgePage = () => {
   const arrowColor = useColorModeValue('#1A202C', '#FFFFFF');
 
   return (
-    <Flex direction="column" justify="center" align="center">
+    <Flex direction="column" justify="center" align="center" className="bridge-box">
       <Box
         p={6}
         rounded="lg"

@@ -7,6 +7,7 @@ import type { AddressFormat } from 'types/views/address';
 
 import { route } from 'nextjs-routes';
 
+import config from 'configs/app';
 import { toBech32Address } from 'lib/address/bech32';
 import dayjs from 'lib/date/dayjs';
 import highlightText from 'lib/highlightText';
@@ -59,7 +60,17 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
   const content = (() => {
     switch (data.type) {
       case 'token': {
-        const name = data.name + (data.symbol ? ` (${ data.symbol })` : '');
+        let symbol = data.symbol;
+        let tokenName = data.name;
+        // Check if the token address exists in the tokens list
+        if (data.address_hash) {
+          const updatedToken = config.verse.tokens.findByAddress(data.address_hash);
+          if (updatedToken) {
+            tokenName = updatedToken.name;
+            symbol = updatedToken.symbol;
+          }
+        }
+        const name = tokenName + (symbol ? ` (${ symbol })` : '');
         const hash = data.filecoin_robust_address || (addressFormat === 'bech32' ? toBech32Address(data.address_hash) : data.address_hash);
 
         return (
@@ -111,7 +122,15 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
       case 'contract':
       case 'address': {
         const shouldHighlightHash = ADDRESS_REGEXP.test(searchTerm);
-        const addressName = data.name || data.ens_info?.name;
+        
+        let addressName = data.name || data.ens_info?.name;
+        // Check if the token address exists in the tokens list
+        if (data.address_hash) {
+          const updatedToken = config.verse.tokens.findByAddress(data.address_hash);
+          if (updatedToken) {
+            addressName = updatedToken.name;
+          }
+        }
         const address = {
           hash: data.address_hash,
           filecoin: {
@@ -179,6 +198,14 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
       case 'label': {
         const hash = data.filecoin_robust_address || (addressFormat === 'bech32' ? toBech32Address(data.address_hash) : data.address_hash);
 
+        let tokenName = data.name;
+        // Check if the token address exists in the tokens list
+        if (data.address_hash) {
+          const updatedToken = config.verse.tokens.findByAddress(data.address_hash);
+          if (updatedToken) {
+            tokenName = updatedToken.name;
+          }
+        }
         return (
           <>
             <TableCell>
@@ -191,7 +218,7 @@ const SearchResultTableItem = ({ data, searchTerm, isLoading, addressFormat }: P
                   loading={ isLoading }
                   onClick={ handleLinkClick }
                 >
-                  <span dangerouslySetInnerHTML={{ __html: highlightText(data.name, searchTerm) }}/>
+                  <span dangerouslySetInnerHTML={{ __html: highlightText(tokenName, searchTerm) }}/>
                 </Link>
               </Flex>
             </TableCell>

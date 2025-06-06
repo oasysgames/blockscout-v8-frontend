@@ -112,6 +112,7 @@ All json-like values should be single-quoted. If it contains a hash (`#`) or a d
 | NEXT_PUBLIC_NETWORK_VERIFICATION_TYPE | `validation` \| `mining` | Verification type in the network. Irrelevant for Arbitrum (verification type is always `posting`) and ZkEvm (verification type is always `sequencing`) L2s | - | `mining` | `validation` | v1.0.x+ |
 | NEXT_PUBLIC_NETWORK_TOKEN_STANDARD_NAME | `string` | Name of the standard for creating tokens | - | `ERC` | `BEP` | v1.31.0+ |
 | NEXT_PUBLIC_IS_TESTNET | `boolean`| Set to true if network is testnet | - | `false` | `true` | v1.0.x+ |
+| NEXT_PUBLIC_NETWORK_CURRENCY_IMAGE | `string` | Network currency coin image | - | - | `https://assets.coingecko.com/coins/images/27909/standard/OAS.png` | v1.38.x+ |
 
 &nbsp;
 
@@ -471,7 +472,7 @@ This feature is **enabled by default** with the `coinzilla` ads provider. To swi
 
 | Variable | Type| Description | Compulsoriness  | Default value | Example value | Version |
 | --- | --- | --- | --- | --- | --- | --- |
-| NEXT_PUBLIC_ROLLUP_TYPE | `'optimistic' \| 'arbitrum' \| 'shibarium' \| 'zkEvm' \| 'zkSync' \| 'scroll'` | Rollup chain type | Required | - | `'optimistic'` | v1.24.0+ |
+| NEXT_PUBLIC_ROLLUP_TYPE | `'optimistic' \| 'arbitrum' \| 'shibarium' \| 'zkEvm' \| 'zkSync' \| 'scroll' \| 'oasys'` | Rollup chain type | Required | - | `'optimistic'` | v1.24.0+ |
 | NEXT_PUBLIC_ROLLUP_L1_BASE_URL | `string` | Blockscout base URL for L1 network. **DEPRECATED** _Use `NEXT_PUBLIC_ROLLUP_PARENT_CHAIN` instead_ | Required | - | `'http://eth-goerli.blockscout.com'` | v1.24.0+ |
 | NEXT_PUBLIC_ROLLUP_L2_WITHDRAWAL_URL | `string` | URL for L2 -> L1 withdrawals (Optimistic stack only) | Required for `optimistic` rollups | - | `https://app.optimism.io/bridge/withdraw` | v1.24.0+ |
 | NEXT_PUBLIC_ROLLUP_STAGE_INDEX | `1 \| 2` | Reflects the maturity and decentralization level of the chain based on [L2BEAT's framework](https://medium.com/l2beat/introducing-stages-a-framework-to-evaluate-rollups-maturity-d290bb22befe). The label will be added to the sidebar according to the provided stage index. Not applicable for testnets. | - | - | `1` | v2.1.0+ |
@@ -607,6 +608,7 @@ This feature is **always enabled**, but you can disable it by passing `none` val
 | --- | --- | --- | --- | --- | --- | --- |
 | NEXT_PUBLIC_STATS_API_HOST | `string` | Stats API endpoint url | Required | - | `https://stats.services.blockscout.com` | v1.0.x+ |
 | NEXT_PUBLIC_STATS_API_BASE_PATH | `string` | Base path for Stats API endpoint url | - | - | `/poa/core` | v1.29.0+ |
+| NEXT_PUBLIC_EXPERIMENT_VISIBLE | `boolean`| Set to true to enable EXPERIMENT views. | - | - | `true` | v1.38.x+ |
 | NEXT_PUBLIC_EXPERIMENT_API_URL | `string` | TheGraph API endpoint url | - | `http://localhost:8000/subgraphs/name/oasys/bridge` | `https://api.thegraph.com/subgraphs/name/oasys/bridge` | v1.36.x+ |
 
 &nbsp;
@@ -978,6 +980,4 @@ This feature allows you to display a custom alert banner in the header of the ap
 ### Verse token configuration
 | Variable | Type| Description | Compulsoriness  | Default value | Example value | Version |
 | --- | --- | --- | --- | --- | --- | --- |
-| NEXT_PUBLIC_TOKENS_UPDATED_ADDRESS | `string` | Set the address if the token has changed | - | `` | `0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000` | v6.7.x+ |
-| NEXT_PUBLIC_TOKENS_UPDATED_NAME | `string` | Set the token name if the token has changed | - | `Oasys` | `` | v6.7.x+ |
-| NEXT_PUBLIC_TOKENS_UPDATED_SYMBOL | `string` | Set the token symbol if the token has changed | - | `OAS` | `` | v6.7.x+ |
+| NEXT_PUBLIC_UPDATED_TOKENS | `string` | The URL of the configuration file (in .json format only) or a string representation of the file content. It contains a list of updated tokens to be displayed.| - | - | `https://oasys-blockscout-networks.s3.ap-northeast-1.amazonaws.com/blockscout-updated-tokens.json` \| `{"tokens":[{"address":"0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000","name":"Oasys","symbol":"OAS"},{"address":"0xE1aB220E37AC55A4E2dD5Ba148298A9c09fBD716","name":"Legacy Bridged USDC (Celer)","symbol":"USDC.e-legacy"}]}` | v1.38.x+ |

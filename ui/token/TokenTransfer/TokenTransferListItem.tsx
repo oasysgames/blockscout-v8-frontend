@@ -31,10 +31,13 @@ const TokenTransferListItem = ({
   instance,
 }: Props) => {
   let symbol = token?.symbol;
-  // in case tokens is updated name
-  const updatedAddress = config.verse.tokens.updatedAddress.toLowerCase();
-  if (updatedAddress.length > 0 && token?.address_hash.toLowerCase().includes(updatedAddress)) {
-    symbol = config.verse.tokens.updatedSymbol;
+  
+  // Check if the token address exists in the tokens list
+  if (token?.address_hash) {
+    const updatedToken = config.verse.tokens.findByAddress(token.address_hash);
+    if (updatedToken) {
+      symbol = updatedToken.symbol;
+    }
   }
 
   const { usd, valueStr } = total && 'value' in total && total.value !== null ? getCurrencyValue({

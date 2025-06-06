@@ -328,6 +328,22 @@ export type GeneralApiRollupResourceName = `general:${ keyof typeof GENERAL_API_
 
 /* eslint-disable @stylistic/indent */
 export type GeneralApiRollupResourcePayload<R extends GeneralApiRollupResourceName> =
+R extends 'general:oasys_l2_output_roots' ? OptimisticL2OutputRootsResponse :
+R extends 'general:oasys_l2_withdrawals' ? OptimisticL2WithdrawalsResponse :
+R extends 'general:oasys_l2_deposits' ? OptimisticL2DepositsResponse :
+R extends 'general:oasys_l2_txn_batches' ? OptimisticL2TxnBatchesResponse :
+R extends 'general:oasys_l2_txn_batches_count' ? number :
+R extends 'general:oasys_l2_txn_batch' ? OptimismL2TxnBatch :
+R extends 'general:oasys_l2_txn_batch_celestia' ? OptimismL2TxnBatch :
+R extends 'general:oasys_l2_txn_batch_txs' ? OptimismL2BatchTxs :
+R extends 'general:oasys_l2_txn_batch_blocks' ? OptimismL2BatchBlocks :
+R extends 'general:oasys_l2_dispute_games' ? OptimisticL2DisputeGamesResponse :
+R extends 'general:oasys_l2_output_roots_count' ? number :
+R extends 'general:oasys_l2_withdrawals_count' ? number :
+R extends 'general:oasys_l2_deposits_count' ? number :
+R extends 'general:oasys_l2_dispute_games_count' ? number :
+R extends 'general:oasys_l2_interop_messages' ? InteropMessageListResponse :
+R extends 'general:oasys_l2_interop_messages_count' ? number :
 R extends 'general:optimistic_l2_output_roots' ? OptimisticL2OutputRootsResponse :
 R extends 'general:optimistic_l2_withdrawals' ? OptimisticL2WithdrawalsResponse :
 R extends 'general:optimistic_l2_deposits' ? OptimisticL2DepositsResponse :
