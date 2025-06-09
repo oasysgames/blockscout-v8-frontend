@@ -50,7 +50,6 @@ export function app(): CspDev.DirectiveDescriptor {
       ...(getFeaturePayload(config.features.rollup)?.parentChain?.rpcUrls ?? []),
       'https://infragrid.v.network', // RPC providers
       'https://rpc.mainnet.oasys.games', // In case using bridge, it requires to connect to L1 RPC
-      'https://infragrid.v.nestwork', // RPC providers
 
       // github (spec for api-docs page)
       'raw.githubusercontent.com',
