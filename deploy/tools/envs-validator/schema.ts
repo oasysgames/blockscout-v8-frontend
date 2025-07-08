@@ -840,6 +840,7 @@ const schema = yup
     NEXT_PUBLIC_NETWORK_LOGO_DARK: yup.string().test(urlTest),
     NEXT_PUBLIC_NETWORK_ICON: yup.string().test(urlTest),
     NEXT_PUBLIC_NETWORK_ICON_DARK: yup.string().test(urlTest),
+    NEXT_PUBLIC_SHOW_FEATURED_NETWORKS_BY_OLD_UI: yup.boolean(),
 
     // bridge
     NEXT_PUBLIC_MENU_BRIDGE_VISIBLE: yup.boolean(),
