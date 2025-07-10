@@ -67,6 +67,7 @@ const UI = Object.freeze({
     otherLinks: parseEnvJson<Array<NavItemExternal>>(getEnvValue('NEXT_PUBLIC_OTHER_LINKS')) || [],
     featuredNetworks: getExternalAssetFilePath('NEXT_PUBLIC_FEATURED_NETWORKS'),
     layout: (getEnvValue('NEXT_PUBLIC_NAVIGATION_LAYOUT') || 'vertical') as NavigationLayout,
+    showFeaturedNetworksByOldUiFlg: getEnvValue('NEXT_PUBLIC_SHOW_FEATURED_NETWORKS_BY_OLD_UI') === 'true' ? true : false,
   },
   footer: {
     links: getExternalAssetFilePath('NEXT_PUBLIC_FOOTER_LINKS'),
