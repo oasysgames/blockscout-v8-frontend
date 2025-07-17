@@ -301,7 +301,7 @@ const BridgePage = () => {
         </button>
       </Box>
 
-      <LoadingModal loading={loading} error={error} hash={hash}/>
+      <LoadingModal loading={loading} error={error} hash={hash} chainId={isDeposit ? l1ChainId : l2ChainId}/>
     </Flex>
   );
 };

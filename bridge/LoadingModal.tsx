@@ -15,6 +15,7 @@ const Lottie = dynamic(() => import('lottie-react'), {
 export interface LoadingModalInput {
   loading: boolean;
   hash: string | undefined;
+  chainId: number | 248;
   error: string | undefined;
 }
 
@@ -70,10 +71,9 @@ export const LoadingIcon: React.FC<{ w?: number; h?: number; c?: string }> = ({
   </>
 );
 
-export const LoadingModal: React.FC<LoadingModalInput> = ({ loading, hash, error = '' }) => {
+export const LoadingModal: React.FC<LoadingModalInput> = ({ loading, hash, chainId, error = '' }) => {
   const [ isOpen, setIsOpen ] = useState(false);
 
-  const chainId = useChainId();
   const chain = useMemo(() => getChainInfo(chainId), [ chainId ]);
   const explorer = chain?.blockExplorers?.default.url;
 
