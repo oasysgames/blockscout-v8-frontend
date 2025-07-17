@@ -1,6 +1,6 @@
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 import type { AppKitNetwork } from '@reown/appkit/networks';
-import { Oasys } from 'bridge/constants/chains';
+import { Oasys, OasysTestnet } from 'bridge/constants/chains';
 import type { Chain } from 'viem';
 import { fallback, http } from 'viem';
 import { createConfig } from 'wagmi';
@@ -10,8 +10,8 @@ import { currentChain, parentChain } from 'lib/web3/chains';
 
 const feature = config.features.blockchainInteraction;
 
-let chains = [ currentChain, parentChain ].filter(Boolean);
-chains = config.verse.bridge.isVisible ? [ currentChain, Oasys ] : [ currentChain ];
+let chains = [ currentChain, parentChain, OasysTestnet ].filter(Boolean);
+chains = config.verse.bridge.isVisible ? [ currentChain, Oasys, OasysTestnet ] : [ currentChain ];
 
 const wagmi = (() => {
 
@@ -38,6 +38,7 @@ const wagmi = (() => {
     multiInjectedProviderDiscovery: true,
     transports: {
       [Oasys.id]: http(),
+      [OasysTestnet.id]: http(),
       [currentChain.id]: fallback(config.chain.rpcUrls.map((url) => http(url))),
       ...(parentChain ? { [parentChain.id]: http() } : {}),
     },

@@ -3,7 +3,7 @@ import { ChainId } from './types';
 export const CHAINS_ICONS: { [k in ChainId]: string } = {
   [ChainId.OASYS]: '/images/Oasys.png',
   [ChainId.OASYS_TESTNET]: '/images/Oasys.png',
-  [ChainId.SANDVERSE_TESTNET]: 'SandVerse',
+  [ChainId.SANDVERSE_TESTNET]: '/images/oasys_icon.png',
   [ChainId.TCG]: '/images/tcg.svg',
   [ChainId.MCH]: '/images/mch.svg',
   [ChainId.SAAKURU]: '/images/saakuru.svg',
