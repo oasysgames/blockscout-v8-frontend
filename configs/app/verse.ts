@@ -103,6 +103,7 @@ if (typeof window !== 'undefined') {
 
 export const CHAIN_INFO: { [key: string]: { id: number; name: string } } = {
   '248': { id: 248, name: 'Oasys' },
+  '9372': { id: 9372, name: 'OasysTestnet' },
   '2400': { id: 2400, name: 'TCGVerse' },
   '7225878': { id: 7225878, name: 'SaakuruVerse' },
   '29548': { id: 29548, name: 'MCHVerse' },
@@ -137,6 +138,7 @@ export default Object.freeze({
   },
   bridge: {
     isVisible: getEnvValue('NEXT_PUBLIC_MENU_BRIDGE_VISIBLE') === 'true',
+    l1BridgeAddress: getEnvValue('NEXT_PUBLIC_L1_BRIDGE_ADDRESS') || '0x9245e19eB88de2534E03E764FB2a5f194e6d97AD',
     l2ChainId: getEnvValue('NEXT_PUBLIC_L2_CHAIN_ID') || 2400,
     l2ChainName: getChainName,
     verseVersion: getEnvValue('NEXT_PUBLIC_VERSE_VERSION'),

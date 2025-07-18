@@ -845,6 +845,7 @@ const schema = yup
     // bridge
     NEXT_PUBLIC_MENU_BRIDGE_VISIBLE: yup.boolean(),
     NEXT_PUBLIC_L2_CHAIN_ID: yup.number().positive().integer(),
+    NEXT_PUBLIC_L1_BRIDGE_ADDRESS: yup.string(),
     NEXT_PUBLIC_VERSE_VERSION: yup.number().positive().integer(),
 
     //     c. footer

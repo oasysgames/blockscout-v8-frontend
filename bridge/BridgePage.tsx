@@ -17,7 +17,8 @@ import type { SelectListItem } from './SelectModal';
 import { SelectModal } from './SelectModal';
 import config from 'configs/app';
 
-// Get l2ChainId from .env
+// Get l1ChainId, l2ChainId from .env
+const l1ChainId = config.chain.isTestnet ? ChainId.OASYS_TESTNET : ChainId.OASYS;
 const l2ChainId = Number(config.verse.bridge.l2ChainId) as ChainId;
 const verseVersion = Number(config.verse.bridge.verseVersion) || getVerseVersion(l2ChainId);
 
@@ -34,7 +35,7 @@ const BridgePage = () => {
   const tokenInfoItems: Array<SelectListItem> = useMemo(
     () =>
     // exclude TokenIndex.USDCeLegacy when deposit
-      getTokenList(ChainId.OASYS, l2ChainId, isDeposit ? [ TokenIndex.USDCeLegacy ] : [])
+      getTokenList(l1ChainId, l2ChainId, isDeposit ? [ TokenIndex.USDCeLegacy ] : [])
         .map((t) => getTokenInfo(t))
         .map((t) => ({ id: t.ind, image: t.icon || '', text: t.symbol })),
     [ isDeposit ],
@@ -47,21 +48,21 @@ const BridgePage = () => {
   // switch chain when switch between deposit/withdraw
   const { switchChainAsync } = useSwitchChain();
   useEffect(() => {
-    const chainId = isDeposit ? ChainId.OASYS : l2ChainId
+    const chainId = isDeposit ? l1ChainId : l2ChainId
     switchChainAsync({ chainId })
   }, [isDeposit])
 
-  const [ deposit, withdraw, loading, hash, error ] = useDepositWithdraw(verseVersion ? 1 : 0, isDeposit ? ChainId.OASYS : l2ChainId);
+  const [ deposit, withdraw, loading, hash, error ] = useDepositWithdraw(verseVersion ? 1 : 0, isDeposit ? l1ChainId : l2ChainId);
 
   const doBridge = useCallback(() => {
     if (isDeposit) {
-      deposit(ChainId.OASYS, l2ChainId, tokenIndex, value);
+      deposit(l1ChainId, l2ChainId, tokenIndex, value);
     } else {
-      withdraw(ChainId.OASYS, l2ChainId, tokenIndex, value);
+      withdraw(l1ChainId, l2ChainId, tokenIndex, value);
     }
   }, [ deposit, withdraw, isDeposit, tokenIndex, value ]);
 
-  const l1Balance = useBalances(ChainId.OASYS, tokenIndex);
+  const l1Balance = useBalances(l1ChainId, tokenIndex);
   const l2Balance = useBalances(l2ChainId, tokenIndex);
 
   const setMax = useCallback(() => {
@@ -147,13 +148,13 @@ const BridgePage = () => {
             <Flex align="center" p={3} borderWidth="1px" borderColor={borderColor} rounded="lg" bg={cardBg}>
               <Image
                 src="/images/oasys_icon.png"
-                alt="Oasys Mainnet"
+                alt={CHAINS[l1ChainId].name}
                 width={24}
                 height={24}
                 className="mr-2"
               />
               <Text ml={2} fontWeight="medium" w="full" color={textColor}>
-                Oasys Mainnet
+                {CHAINS[l1ChainId].name}
               </Text>
             </Flex>
           </Box>
@@ -300,7 +301,7 @@ const BridgePage = () => {
         </button>
       </Box>
 
-      <LoadingModal loading={loading} error={error} hash={hash}/>
+      <LoadingModal loading={loading} error={error} hash={hash} chainId={isDeposit ? l1ChainId : l2ChainId}/>
     </Flex>
   );
 };
