@@ -27,7 +27,4 @@ export const GeekVerse = defineChain({
       },
     },
   },
-  erc20Addresses: {
-    [TokenIndex.GEEK]: '0x3741FcB5792673eF220cCc0b95B5B8C38c5f2723',
-  },
 });

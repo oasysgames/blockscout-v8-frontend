@@ -32,14 +32,24 @@ const BridgePage = () => {
   const [ isDeposit, setIsDeposit ] = useState(true);
   const [ value, setValue ] = useState('');
 
-  const tokenInfoItems: Array<SelectListItem> = useMemo(
-    () =>
-    // exclude TokenIndex.USDCeLegacy when deposit
-      getTokenList(l1ChainId, l2ChainId, isDeposit ? [ TokenIndex.USDCeLegacy ] : [])
-        .map((t) => getTokenInfo(t))
-        .map((t) => ({ id: t.ind, image: t.icon || '', text: t.symbol })),
-    [ isDeposit ],
-  );
+  const [tokenInfoItems, setTokenInfoItems] = useState<Array<SelectListItem>>([]);
+
+  // Load token list asynchronously
+  useEffect(() => {
+    const loadTokenList = async () => {
+      try {
+        const tokenList = await getTokenList(l1ChainId, l2ChainId, isDeposit ? [ TokenIndex.USDCeLegacy ] : []);
+        const items = tokenList
+          .map((t) => getTokenInfo(t))
+          .map((t) => ({ id: t.ind, image: t.icon || '', text: t.symbol }));
+        setTokenInfoItems(items);
+      } catch (error) {
+        console.error('Error loading token list:', error);
+        setTokenInfoItems([]);
+      }
+    };
+    loadTokenList();
+  }, [isDeposit, l1ChainId, l2ChainId]);
 
   const handleSwap = () => {
     setIsDeposit((val) => !val);

@@ -26,8 +26,4 @@ export const YooldoVerse = defineChain({
       },
     },
   },
-  erc20Addresses: {
-    [TokenIndex.USDT]: '0xcfD1D50ce23C46D3Cf6407487B2F8934e96DC8f9',
-    [TokenIndex.USDCeLegacy]: '0xA29b548056c3fD0f68BAd9d4829EC4E66f22f796',
-  },
 });

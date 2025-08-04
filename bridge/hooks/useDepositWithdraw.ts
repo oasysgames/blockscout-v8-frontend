@@ -68,8 +68,8 @@ export function useDepositWithdraw(verseVersion: 0 | 1, chainId: number): UseDep
         });
       } else {
         // depositERC20To
-        const l1Address = getTokenAddress(l1ChainId, tokenInd);
-        const l2Address = getTokenAddress(l2ChainId, tokenInd);
+        const l1Address = await getTokenAddress(l1ChainId, tokenInd);
+        const l2Address = await getTokenAddress(l2ChainId, tokenInd);
 
         const hash = await approve(
           l1Address as Address,
@@ -105,7 +105,7 @@ export function useDepositWithdraw(verseVersion: 0 | 1, chainId: number): UseDep
       setIsLoading(true);
 
       const isNative = tokenInd === TokenIndex.OAS;
-      const l2TokenAddr = isNative ? l2OASLegacyAddr : getTokenAddress(l2ChainId, tokenInd);
+      const l2TokenAddr = isNative ? l2OASLegacyAddr : await getTokenAddress(l2ChainId, tokenInd);
 
       // send transaction
       await writeContractAsync({

@@ -814,6 +814,7 @@ const schema = yup
 
     // Custom tokens
     NEXT_PUBLIC_UPDATED_TOKENS: yup.string(),
+    NEXT_PUBLIC_ERC20_BRIDGE_TOKENS: yup.string(),
     
     //     b. sidebar
     NEXT_PUBLIC_FEATURED_NETWORKS: yup

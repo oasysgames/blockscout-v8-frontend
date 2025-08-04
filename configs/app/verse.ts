@@ -1,4 +1,4 @@
-import { getEnvValue, getExternalAssetFilePath } from './utils';
+import { getEnvValue, getExternalAssetFilePath, parseEnvJson } from './utils';
 
 // Define token interface
 interface Token {
@@ -93,12 +93,137 @@ class TokenListManager {
   }
 }
 
+// Bridge token interface with TokenIndex mapping
+interface BridgeToken extends Token {
+  tokenIndex?: string;
+}
+
+interface BridgeTokenList {
+  tokens: Array<BridgeToken>;
+}
+
+class BridgeTokenListManager {
+  private tokenList: BridgeTokenList;
+  private _erc20Addresses: { [key: string]: string } = {};
+
+  constructor() {
+    this.tokenList = { tokens: [] };
+  }
+
+  public async fetchTokenList() {
+    try {
+      // Get the environment variable value
+      const envValue = getEnvValue('NEXT_PUBLIC_ERC20_BRIDGE_TOKENS');
+
+      if (!envValue) {
+        console.log('No bridge token configuration found, using default');
+        return;
+      }
+
+      let data;
+
+      // Check if it's a URL
+      if (envValue.startsWith('http://') || envValue.startsWith('https://')) {
+        // It's a URL, fetch from URL
+        console.log('Fetching bridge tokens from URL:', envValue);
+        const response = await fetch(envValue);
+        if (!response.ok) {
+          console.log(`Failed to fetch external bridge token list (${ response.status }), using default token list`);
+          return;
+        }
+        data = await response.json();
+      } else {
+        // It's JSON content, parse directly
+        console.log('Parsing bridge tokens from JSON content');
+        data = parseEnvJson(envValue);
+        if (!data) {
+          console.log('Failed to parse bridge token JSON content, using default token list');
+          return;
+        }
+      }
+
+      // Validate the data structure
+      if (this.isValidBridgeTokenList(data)) {
+        this.tokenList = data;
+        // Build erc20Addresses mapping
+        this.buildErc20Addresses();
+        console.log('Bridge token list loaded successfully from external source');
+      } else {
+        console.error('Invalid bridge token list format from external source');
+        console.log('Using default bridge token list as fallback');
+      }
+    } catch (error) {
+      console.error('Error loading bridge token list from external source:', error);
+      console.log('Using default bridge token list as fallback');
+    }
+  }
+
+  private isValidBridgeTokenList(data: unknown): data is BridgeTokenList {
+    return (
+      typeof data === 'object' &&
+      data !== null &&
+      'tokens' in data &&
+      Array.isArray((data as BridgeTokenList).tokens) &&
+      (data as BridgeTokenList).tokens.every(token =>
+        typeof token === 'object' &&
+        token !== null &&
+        'address' in token &&
+        'name' in token &&
+        'symbol' in token &&
+        'tokenIndex' in token,
+      )
+    );
+  }
+
+  private buildErc20Addresses() {
+    this._erc20Addresses = {};
+    this.tokenList.tokens.forEach(token => {
+      if (token.tokenIndex) {
+        this._erc20Addresses[token.tokenIndex] = token.address;
+      }
+    });
+  }
+
+  public findTokenByAddress(address: string): BridgeToken | undefined {
+    if (!address) return undefined;
+
+    const lowerCaseAddress = address.toLowerCase();
+    return this.tokenList.tokens.find(token =>
+      token.address.toLowerCase() === lowerCaseAddress,
+    );
+  }
+
+  public get all(): Array<BridgeToken> {
+    return this.tokenList.tokens;
+  }
+
+  public get erc20Addresses(): { [key: string]: string } {
+    return this._erc20Addresses;
+  }
+
+  public async ensureLoaded(): Promise<void> {
+    if (this.tokenList.tokens.length === 0) {
+      await this.fetchTokenList();
+    }
+  }
+}
+
 // Create a singleton instance
 const tokenListManager = new TokenListManager();
 
+const bridgeTokenListManager = new BridgeTokenListManager();
+
 // Initialize token list in client environment
 if (typeof window !== 'undefined') {
-  tokenListManager.fetchTokenList();
+  // Load both token lists asynchronously
+  Promise.all([
+    tokenListManager.fetchTokenList(),
+    bridgeTokenListManager.fetchTokenList(),
+  ]).then(() => {
+    console.log('Token lists loaded successfully');
+  }).catch((error) => {
+    console.error('Error loading token lists:', error);
+  });
 }
 
 export const CHAIN_INFO: { [key: string]: { id: number; name: string } } = {
@@ -135,6 +260,20 @@ export default Object.freeze({
     },
     // Function to find token by address
     findByAddress: (address: string) => tokenListManager.findTokenByAddress(address),
+  },
+  bridgeTokens: {
+    // Provide token array from JSON for accessing all tokens when needed
+    get all() {
+      return bridgeTokenListManager.all;
+    },
+    // Function to find token by address
+    findByAddress: (address: string) => bridgeTokenListManager.findTokenByAddress(address),
+    // Get ERC20 addresses mapping
+    get erc20Addresses() {
+      return bridgeTokenListManager.erc20Addresses;
+    },
+    // Ensure bridge token list is loaded
+    ensureLoaded: () => bridgeTokenListManager.ensureLoaded(),
   },
   bridge: {
     isVisible: getEnvValue('NEXT_PUBLIC_MENU_BRIDGE_VISIBLE') === 'true',
