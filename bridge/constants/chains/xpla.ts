@@ -26,4 +26,5 @@ export const XPLAVerse = defineChain({
       },
     },
   },
+  erc20Addresses: {},
 });

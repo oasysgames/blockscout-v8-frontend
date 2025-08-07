@@ -28,5 +28,6 @@ export const SandVerse = /*#__PURE__*/ defineChain({
       },
     },
   },
+  erc20Addresses: {},
 });
 
