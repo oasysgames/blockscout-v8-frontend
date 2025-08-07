@@ -26,4 +26,5 @@ export const DefiVerse = defineChain({
       },
     },
   },
+  erc20Addresses: {},
 });

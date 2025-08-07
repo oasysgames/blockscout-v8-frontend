@@ -26,4 +26,5 @@ export const YooldoVerse = defineChain({
       },
     },
   },
+  erc20Addresses: {},
 });

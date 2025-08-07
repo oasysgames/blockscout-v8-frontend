@@ -26,4 +26,5 @@ export const MCHVerse = /*#__PURE__*/ defineChain({
       },
     },
   },
+  erc20Addresses: {},
 });

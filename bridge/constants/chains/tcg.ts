@@ -26,4 +26,5 @@ export const TCGVerse = /*#__PURE__*/ defineChain({
       },
     },
   },
+  erc20Addresses: {},
 });

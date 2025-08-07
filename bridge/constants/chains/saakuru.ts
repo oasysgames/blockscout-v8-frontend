@@ -27,4 +27,5 @@ export const SaakuruVerse = /*#__PURE__*/ defineChain({
       },
     },
   },
+  erc20Addresses: {},
 });

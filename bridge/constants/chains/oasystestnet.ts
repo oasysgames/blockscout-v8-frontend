@@ -28,4 +28,5 @@ export const OasysTestnet = /*#__PURE__*/ defineChain({
       apiUrl: 'https://explorer.testnet.oasys.games/api',
     },
   },
+  erc20Addresses: {},
 });

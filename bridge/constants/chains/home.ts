@@ -26,4 +26,5 @@ export const HOMEVerse = defineChain({
       },
     },
   },
+  erc20Addresses: {},
 });

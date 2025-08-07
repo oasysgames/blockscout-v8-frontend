@@ -26,4 +26,5 @@ export const GesoVerse = defineChain({
       },
     },
   },
+  erc20Addresses: {},
 });

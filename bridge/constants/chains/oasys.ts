@@ -12,4 +12,5 @@ export const Oasys = defineChain({
       http: [ 'https://rpc.mainnet.oasys.games' ],
     },
   },
+  erc20Addresses: {},
 });

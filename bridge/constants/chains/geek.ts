@@ -27,4 +27,5 @@ export const GeekVerse = defineChain({
       },
     },
   },
+  erc20Addresses: {},
 });
