@@ -110,8 +110,8 @@ const Stats = () => {
           boxSize={ 5 }
           flexShrink={ 0 }
           cursor="pointer"
-          color="icon.info"
-          _hover={{ color: 'link.primary.hove' }}
+          color="icon.secondary"
+          _hover={{ color: 'hover' }}
         />
       </GasInfoTooltip>
     ) : null;
@@ -200,9 +200,10 @@ const Stats = () => {
       },
       apiData?.celo && {
         id: 'current_epoch' as const,
-        icon: 'hourglass' as const,
+        icon: 'hourglass_slim' as const,
         label: 'Current epoch',
         value: `#${ apiData.celo.epoch_number }`,
+        href: { pathname: '/epochs/[number]' as const, query: { number: String(apiData.celo.epoch_number) } },
         isLoading,
       },
     ]

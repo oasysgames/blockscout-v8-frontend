@@ -118,7 +118,7 @@ const LatestBlocks = () => {
           <Text as="span">
             Network utilization:{ nbsp }
           </Text>
-          <Text as="span" color="blue.400" fontWeight={ 700 }>
+          <Text as="span" color="blue.500" fontWeight={ 700 }>
             { statsQueryResult.data?.network_utilization_percentage.toFixed(2) }%
           </Text>
         </Skeleton>

@@ -7,10 +7,13 @@ import { route } from 'nextjs-routes';
 import config from 'configs/app';
 import getCurrencyValue from 'lib/getCurrencyValue';
 import { Link } from 'toolkit/chakra/link';
+import NativeTokenTag from 'ui/shared/celo/NativeTokenTag';
 import TokenEntity from 'ui/shared/entities/token/TokenEntity';
 import TruncatedValue from 'ui/shared/TruncatedValue';
 
 import type { TokenEnhancedData } from '../utils/tokenUtils';
+
+const celoFeature = config.features.celo;
 
 interface Props {
   data: TokenEnhancedData;
@@ -26,6 +29,8 @@ const TokenSelectItem = ({ data }: Props) => {
       symbol = updatedToken.symbol;
     }
   }
+
+  const isNativeToken = celoFeature.isEnabled && data.token.address_hash.toLowerCase() === celoFeature.nativeTokenAddress?.toLowerCase();
 
   const secondRow = (() => {
     switch (data.token.type) {
@@ -103,13 +108,22 @@ const TokenSelectItem = ({ data }: Props) => {
           noCopy
           noLink
           fontWeight={ 700 }
+          width="auto"
           mr={ 2 }
         />
+        { isNativeToken && <NativeTokenTag mr={ 2 }/> }
         { data.usd && (
-          <TruncatedValue value={ `$${ data.usd.toFormat(2) }` } fontWeight={ 700 } minW="120px" ml="auto" textAlign="right"/>
+          <TruncatedValue
+            value={ `$${ data.usd.toFormat(2) }` }
+            fontWeight={ 700 }
+            minW="120px"
+            ml="auto"
+            textAlign="right"
+            color={ isNativeToken ? 'text.secondary' : undefined }
+          />
         ) }
       </Flex>
-      <Flex alignItems="center" justifyContent="space-between" w="100%" whiteSpace="nowrap">
+      <Flex alignItems="center" justifyContent="space-between" w="100%" whiteSpace="nowrap" color={ isNativeToken ? 'text.secondary' : undefined }>
         { secondRow }
       </Flex>
     </Link>

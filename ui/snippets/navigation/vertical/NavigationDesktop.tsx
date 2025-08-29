@@ -11,6 +11,7 @@ import NetworkLogo from 'ui/snippets/networkMenu/NetworkLogo';
 import NetworkMenu from 'ui/snippets/networkMenu/NetworkMenu';
 
 import Banner from '../../../../oasys-experiment/Banner';
+import NavigationPromoBanner from '../promoBanner/NavigationPromoBanner';
 import RollupStageBadge from '../RollupStageBadge';
 import TestnetBadge from '../TestnetBadge';
 import NavLink from './NavLink';
@@ -103,11 +104,13 @@ const NavigationDesktop = () => {
       <Box>
         <Banner/>
       </Box>
+
+      {/* <NavigationPromoBanner isCollapsed={ isCollapsed }/> */}
       <IconSvg
         name="arrows/east-mini"
         width={ 6 }
         height={ 6 }
-        _hover={{ color: 'link.primary.hover' }}
+        _hover={{ color: 'hover' }}
         borderRadius="base"
         bgColor={{ base: 'white', _dark: 'black' }}
         color={{ base: 'blackAlpha.400', _dark: 'whiteAlpha.400' }}

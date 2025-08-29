@@ -39,6 +39,16 @@ declare module "nextjs-routes" {
     | StaticRoute<"/block/countdown">
     | StaticRoute<"/blocks">
     | StaticRoute<"/bridge">
+    | DynamicRoute<"/chain/[chain-slug]/accounts/label/[slug]", { "chain-slug": string; "slug": string }>
+    | DynamicRoute<"/chain/[chain-slug]/advanced-filter", { "chain-slug": string }>
+    | DynamicRoute<"/chain/[chain-slug]/block/[height_or_hash]", { "chain-slug": string; "height_or_hash": string }>
+    | DynamicRoute<"/chain/[chain-slug]/block/countdown/[height]", { "chain-slug": string; "height": string }>
+    | DynamicRoute<"/chain/[chain-slug]/block/countdown", { "chain-slug": string }>
+    | DynamicRoute<"/chain/[chain-slug]/csv-export", { "chain-slug": string }>
+    | DynamicRoute<"/chain/[chain-slug]/op/[hash]", { "chain-slug": string; "hash": string }>
+    | DynamicRoute<"/chain/[chain-slug]/token/[hash]", { "chain-slug": string; "hash": string }>
+    | DynamicRoute<"/chain/[chain-slug]/token/[hash]/instance/[id]", { "chain-slug": string; "hash": string; "id": string }>
+    | DynamicRoute<"/chain/[chain-slug]/tx/[hash]", { "chain-slug": string; "hash": string }>
     | StaticRoute<"/chakra">
     | StaticRoute<"/contract-verification">
     | StaticRoute<"/csv-export">
@@ -46,8 +56,9 @@ declare module "nextjs-routes" {
     | StaticRoute<"/dispute-games">
     | DynamicRoute<"/experiment/[id]", { "id": string }>
     | StaticRoute<"/experiment">
+    | DynamicRoute<"/epochs/[number]", { "number": string }>
+    | StaticRoute<"/epochs">
     | StaticRoute<"/gas-tracker">
-    | StaticRoute<"/graphiql">
     | StaticRoute<"/">
     | StaticRoute<"/internal-txs">
     | StaticRoute<"/interop-messages">

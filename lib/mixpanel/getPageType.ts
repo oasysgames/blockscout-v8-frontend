@@ -55,6 +55,8 @@ export const PAGE_TYPE_DICT: Record<Route['pathname'], string> = {
   '/name-domains/[name]': 'Domain details',
   '/validators': 'Validators list',
   '/validators/[id]': 'Validator details',
+  '/epochs': 'Epochs',
+  '/epochs/[number]': 'Epoch details',
   '/gas-tracker': 'Gas tracker',
   '/mud-worlds': 'MUD worlds',
   '/token-transfers': 'Token transfers',
@@ -64,6 +66,18 @@ export const PAGE_TYPE_DICT: Record<Route['pathname'], string> = {
   '/interop-messages': 'Interop messages',
   '/operations': 'Operations',
   '/operation/[id]': 'Operation details',
+
+  // multichain routes
+  '/chain/[chain-slug]/accounts/label/[slug]': 'Chain addresses search by label',
+  '/chain/[chain-slug]/advanced-filter': 'Chain advanced filter',
+  '/chain/[chain-slug]/block/[height_or_hash]': 'Chain block details',
+  '/chain/[chain-slug]/block/countdown': 'Chain block countdown index',
+  '/chain/[chain-slug]/block/countdown/[height]': 'Chain block countdown',
+  '/chain/[chain-slug]/csv-export': 'Chain export data to CSV',
+  '/chain/[chain-slug]/op/[hash]': 'Chain user operation details',
+  '/chain/[chain-slug]/token/[hash]': 'Chain token details',
+  '/chain/[chain-slug]/token/[hash]/instance/[id]': 'Chain token NFT instance',
+  '/chain/[chain-slug]/tx/[hash]': 'Chain transaction details',
 
   // service routes, added only to make typescript happy
   '/login': 'Login',

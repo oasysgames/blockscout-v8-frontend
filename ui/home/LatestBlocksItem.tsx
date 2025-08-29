@@ -6,6 +6,7 @@ import type { Block } from 'types/api/block';
 import config from 'configs/app';
 import getBlockTotalReward from 'lib/block/getBlockTotalReward';
 import getNetworkValidatorTitle from 'lib/networks/getNetworkValidatorTitle';
+import { currencyUnits } from 'lib/units';
 import { Skeleton } from 'toolkit/chakra/skeleton';
 import { Tooltip } from 'toolkit/chakra/tooltip';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
@@ -38,8 +39,8 @@ const LatestBlocksItem = ({ block, isLoading, animation }: Props) => {
           fontWeight={ 500 }
           mr="auto"
         />
-        { block.celo?.is_epoch_block && (
-          <Tooltip content={ `Finalized epoch #${ block.celo.epoch_number }` }>
+        { block.celo?.l1_era_finalized_epoch_number && (
+          <Tooltip content={ `Finalized epoch #${ block.celo.l1_era_finalized_epoch_number }` }>
             <IconSvg name="checkered_flag" boxSize={ 5 } p="1px" ml={ 2 } isLoading={ isLoading } flexShrink={ 0 }/>
           </Tooltip>
         ) }
@@ -62,7 +63,11 @@ const LatestBlocksItem = ({ block, isLoading, animation }: Props) => {
         { !config.features.rollup.isEnabled && !config.UI.views.block.hiddenFields?.total_reward && (
           <>
             <Skeleton loading={ isLoading }>Reward</Skeleton>
-            <Skeleton loading={ isLoading } color="text.secondary"><span>{ totalReward.dp(10).toFixed() }</span></Skeleton>
+            <Skeleton loading={ isLoading } color="text.secondary">
+              <span>
+                { totalReward.dp(10).toFixed() } { currencyUnits.ether }
+              </span>
+            </Skeleton>
           </>
         ) }
 

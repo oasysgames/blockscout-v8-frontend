@@ -7,10 +7,10 @@ import type { TabItemRegular } from './types';
 import { useScrollDirection } from 'lib/contexts/scrollDirection';
 import useIsMobile from 'lib/hooks/useIsMobile';
 
-import { useIsSticky } from '../..//hooks/useIsSticky';
 import { Skeleton } from '../../chakra/skeleton';
 import type { TabsProps } from '../../chakra/tabs';
 import { TabsCounter, TabsList, TabsTrigger } from '../../chakra/tabs';
+import { useIsSticky } from '../../hooks/useIsSticky';
 import AdaptiveTabsMenu from './AdaptiveTabsMenu';
 import useAdaptiveTabs from './useAdaptiveTabs';
 import useScrollToActiveTab from './useScrollToActiveTab';
@@ -86,6 +86,10 @@ const AdaptiveTabsList = (props: Props) => {
   const activeTabIndex = tabsList.findIndex((tab) => getTabValue(tab) === activeTab) ?? 0;
   useScrollToActiveTab({ activeTabIndex, listRef, tabsRefs, isMobile, isLoading });
 
+  if (tabs.length === 1 && !leftSlot && !rightSlot) {
+    return null;
+  }
+
   const isReady = !isLoading && tabsCut !== undefined;
 
   return (
@@ -133,7 +137,7 @@ const AdaptiveTabsList = (props: Props) => {
         </Box>
       )
       }
-      { tabsList.map((tab, index) => {
+      { tabs.length > 1 && tabsList.map((tab, index) => {
         const value = getTabValue(tab);
         const ref = tabsRefs[index];
 

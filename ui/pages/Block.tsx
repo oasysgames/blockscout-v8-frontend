@@ -6,8 +6,10 @@ import React from 'react';
 import type { TabItemRegular } from 'toolkit/components/AdaptiveTabs/types';
 import type { PaginationParams } from 'ui/shared/pagination/types';
 
+import { routeParams } from 'nextjs/routes';
+
 import config from 'configs/app';
-import { useAppContext } from 'lib/contexts/app';
+import { useMultichainContext } from 'lib/contexts/multichain';
 import throwOnAbsentParamError from 'lib/errors/throwOnAbsentParamError';
 import throwOnResourceLoadError from 'lib/errors/throwOnResourceLoadError';
 import useIsMobile from 'lib/hooks/useIsMobile';
@@ -17,7 +19,6 @@ import { Skeleton } from 'toolkit/chakra/skeleton';
 import RoutedTabs from 'toolkit/components/RoutedTabs/RoutedTabs';
 import BlockCeloEpochTag from 'ui/block/BlockCeloEpochTag';
 import BlockDetails from 'ui/block/BlockDetails';
-import BlockEpochRewards from 'ui/block/BlockEpochRewards';
 import BlockInternalTxs from 'ui/block/BlockInternalTxs';
 import BlockWithdrawals from 'ui/block/BlockWithdrawals';
 import useBlockBlobTxsQuery from 'ui/block/useBlockBlobTxsQuery';
@@ -28,6 +29,7 @@ import useBlockWithdrawalsQuery from 'ui/block/useBlockWithdrawalsQuery';
 import TextAd from 'ui/shared/ad/TextAd';
 import ServiceDegradationWarning from 'ui/shared/alerts/ServiceDegradationWarning';
 import AddressEntity from 'ui/shared/entities/address/AddressEntity';
+import * as BlockEntity from 'ui/shared/entities/block/BlockEntity';
 import NetworkExplorers from 'ui/shared/NetworkExplorers';
 import PageTitle from 'ui/shared/Page/PageTitle';
 import Pagination from 'ui/shared/pagination/Pagination';
@@ -44,9 +46,9 @@ const TABS_HEIGHT = 88;
 const BlockPageContent = () => {
   const router = useRouter();
   const isMobile = useIsMobile();
-  const appProps = useAppContext();
   const heightOrHash = getQueryParamString(router.query.height_or_hash);
   const tab = getQueryParamString(router.query.tab);
+  const multichainContext = useMultichainContext();
 
   const blockQuery = useBlockQuery({ heightOrHash });
   const blockTxsQuery = useBlockTxsQuery({ heightOrHash, blockQuery, tab });
@@ -110,12 +112,7 @@ const BlockPageContent = () => {
           </>
         ),
       } : null,
-    blockQuery.data?.celo?.is_epoch_block ? {
-      id: 'epoch_rewards',
-      title: 'Epoch rewards',
-      component: <BlockEpochRewards heightOrHash={ heightOrHash }/>,
-    } : null,
-  ].filter(Boolean)), [ blockBlobTxsQuery, blockInternalTxsQuery, blockQuery, blockTxsQuery, blockWithdrawalsQuery, hasPagination, heightOrHash ]);
+  ].filter(Boolean)), [ blockBlobTxsQuery, blockInternalTxsQuery, blockQuery, blockTxsQuery, blockWithdrawalsQuery, hasPagination ]);
 
   let pagination;
   if (tab === 'txs') {
@@ -126,24 +123,12 @@ const BlockPageContent = () => {
     pagination = blockInternalTxsQuery.pagination;
   }
 
-  const backLink = React.useMemo(() => {
-    const hasGoBackLink = appProps.referrer && appProps.referrer.includes('/blocks');
-
-    if (!hasGoBackLink) {
-      return;
-    }
-
-    return {
-      label: 'Back to blocks list',
-      url: appProps.referrer,
-    };
-  }, [ appProps.referrer ]);
-
   throwOnAbsentParamError(heightOrHash);
 
   if (blockQuery.isError) {
     if (!blockQuery.isDegradedData && blockQuery.error.status === 404 && !heightOrHash.startsWith('0x')) {
-      router.push({ pathname: '/block/countdown/[height]', query: { height: heightOrHash } });
+      const url = routeParams({ pathname: '/block/countdown/[height]', query: { height: heightOrHash } }, multichainContext);
+      router.push(url, undefined, { shallow: true });
       return null;
     } else {
       throwOnResourceLoadError(blockQuery);
@@ -162,6 +147,10 @@ const BlockPageContent = () => {
         return `Block #${ blockQuery.data?.height }`;
     }
   })();
+
+  const beforeTitleElement = multichainContext?.chain ? (
+    <BlockEntity.Icon variant="heading" chain={ multichainContext.chain } isLoading={ blockQuery.isPlaceholderData }/>
+  ) : null;
 
   const titleSecondRow = (
     <>
@@ -193,7 +182,7 @@ const BlockPageContent = () => {
       <TextAd mb={ 6 }/>
       <PageTitle
         title={ title }
-        backLink={ backLink }
+        beforeTitle={ beforeTitleElement }
         contentAfter={ <BlockCeloEpochTag blockQuery={ blockQuery }/> }
         secondRow={ titleSecondRow }
         isLoading={ blockQuery.isPlaceholderData }

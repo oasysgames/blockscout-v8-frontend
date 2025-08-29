@@ -29,7 +29,6 @@ const OG_TYPE_DICT: Record<Route['pathname'], OGPageType> = {
   '/experiment/[id]': 'Regular page',
   '/bridge': 'Regular page',
   '/api-docs': 'Regular page',
-  '/graphiql': 'Regular page',
   '/search-results': 'Regular page',
   '/auth/profile': 'Root page',
   '/account/merits': 'Regular page',
@@ -57,6 +56,8 @@ const OG_TYPE_DICT: Record<Route['pathname'], OGPageType> = {
   '/name-domains/[name]': 'Regular page',
   '/validators': 'Root page',
   '/validators/[id]': 'Regular page',
+  '/epochs': 'Root page',
+  '/epochs/[number]': 'Regular page',
   '/gas-tracker': 'Root page',
   '/mud-worlds': 'Root page',
   '/token-transfers': 'Root page',
@@ -66,6 +67,18 @@ const OG_TYPE_DICT: Record<Route['pathname'], OGPageType> = {
   '/interop-messages': 'Root page',
   '/operations': 'Root page',
   '/operation/[id]': 'Regular page',
+
+  // multichain routes
+  '/chain/[chain-slug]/accounts/label/[slug]': 'Root page',
+  '/chain/[chain-slug]/advanced-filter': 'Regular page',
+  '/chain/[chain-slug]/block/[height_or_hash]': 'Regular page',
+  '/chain/[chain-slug]/block/countdown': 'Regular page',
+  '/chain/[chain-slug]/block/countdown/[height]': 'Regular page',
+  '/chain/[chain-slug]/csv-export': 'Regular page',
+  '/chain/[chain-slug]/op/[hash]': 'Regular page',
+  '/chain/[chain-slug]/token/[hash]': 'Regular page',
+  '/chain/[chain-slug]/token/[hash]/instance/[id]': 'Regular page',
+  '/chain/[chain-slug]/tx/[hash]': 'Regular page',
 
   // service routes, added only to make typescript happy
   '/login': 'Regular page',

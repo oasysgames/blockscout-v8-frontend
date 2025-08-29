@@ -6,6 +6,7 @@ const PRESETS = {
   arbitrum_sepolia: 'https://arbitrum-sepolia.blockscout.com',
   base: 'https://base.blockscout.com',
   blackfort_testnet: 'https://blackfort-testnet.blockscout.com',
+  celo: 'https://celo.blockscout.com',
   celo_alfajores: 'https://celo-alfajores.blockscout.com',
   eth: 'https://eth.blockscout.com',
   eth_goerli: 'https://eth-goerli.blockscout.com',
@@ -14,6 +15,7 @@ const PRESETS = {
   garnet: 'https://explorer.garnetchain.com',
   gnosis: 'https://gnosis.blockscout.com',
   immutable: 'https://explorer.immutable.com',
+  mega_eth: 'https://eth.blockscout.com', // FIXME: change host when instance is ready
   mekong: 'https://mekong.blockscout.com',
   neon_devnet: 'https://neon-devnet.blockscout.com',
   optimism: 'https://optimism.blockscout.com',
@@ -25,10 +27,11 @@ const PRESETS = {
   scroll_sepolia: 'https://scroll-sepolia.blockscout.com',
   shibarium: 'https://www.shibariumscan.io',
   stability_testnet: 'https://stability-testnet.blockscout.com',
+  tac: 'https://explorer.tac.build',
   tac_turin: 'https://tac-turin.blockscout.com',
   zkevm: 'https://zkevm.blockscout.com',
   zksync: 'https://zksync.blockscout.com',
-  zilliqa_prototestnet: 'https://zilliqa-prototestnet.blockscout.com',
+  zilliqa: 'https://zilliqa.blockscout.com',
   zora: 'https://explorer.zora.energy',
   // main === staging
   main: 'https://eth-sepolia.k8s-dev.blockscout.com',

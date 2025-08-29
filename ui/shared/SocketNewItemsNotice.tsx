@@ -11,23 +11,24 @@ interface InjectedProps {
 }
 
 interface Props {
-  type?: 'transaction' | 'token_transfer' | 'deposit' | 'block';
+  type?: 'transaction' | 'token_transfer' | 'deposit' | 'block' | 'flashblock';
   children?: (props: InjectedProps) => React.JSX.Element;
   className?: string;
   url?: string;
-  alert?: string;
+  showErrorAlert?: boolean;
   num?: number;
   isLoading?: boolean;
+  onLinkClick?: () => void;
 }
 
-const SocketNewItemsNotice = chakra(({ children, className, url, num, alert, type = 'transaction', isLoading }: Props) => {
+const SocketNewItemsNotice = chakra(({ children, className, url, num, showErrorAlert, type = 'transaction', isLoading, onLinkClick }: Props) => {
   const handleLinkClick = React.useCallback(() => {
-    window.location.reload();
-  }, []);
+    onLinkClick ? onLinkClick() : window.location.reload();
+  }, [ onLinkClick ]);
 
   const alertContent = (() => {
-    if (alert) {
-      return alert;
+    if (showErrorAlert) {
+      return 'Live updates temporarily delayed';
     }
 
     let name;
@@ -41,6 +42,9 @@ const SocketNewItemsNotice = chakra(({ children, className, url, num, alert, typ
         break;
       case 'block':
         name = 'block';
+        break;
+      case 'flashblock':
+        name = 'flashblock';
         break;
       default:
         name = 'transaction';
@@ -62,7 +66,7 @@ const SocketNewItemsNotice = chakra(({ children, className, url, num, alert, typ
   const content = !isLoading ? (
     <Alert
       className={ className }
-      status="warning_table"
+      status={ showErrorAlert || !num ? 'warning_table' : 'info' }
       px={ 4 }
       py="6px"
       fontSize="sm"

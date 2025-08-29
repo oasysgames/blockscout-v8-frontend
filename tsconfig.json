@@ -25,22 +25,6 @@
       }
     ]
   },
-  "include": [
-    "**/*.node.ts",
-    "**/*.pw.tsx",
-    "**/*.ts",
-    "**/*.tsx",
-    "decs.d.ts",
-    "global.d.ts",
-    "next-env.d.ts",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "node_modules_linux",
-    "./deploy/tools/envs-validator",
-    "./deploy/tools/favicon-generator",
-    "oasys-experiment",
-    "./toolkit/package"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.node.ts", "**/*.tsx", "**/*.pw.tsx", "decs.d.ts", "global.d.ts", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", "node_modules_linux", "./deploy/tools/envs-validator", "./deploy/tools/favicon-generator", "oasys-experiment", "./deploy/tools/multichain-config-generator", "./toolkit/package"],
 }

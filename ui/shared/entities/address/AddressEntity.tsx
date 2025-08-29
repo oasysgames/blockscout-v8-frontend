@@ -3,15 +3,17 @@ import React from 'react';
 
 import type { AddressParam } from 'types/api/addressParams';
 
-import { route } from 'nextjs-routes';
+import { route } from 'nextjs/routes';
 
 import config from 'configs/app';
 import { toBech32Address } from 'lib/address/bech32';
 import { useAddressHighlightContext } from 'lib/contexts/addressHighlight';
 import { useSettingsContext } from 'lib/contexts/settings';
+import getIconUrl from 'lib/multichain/getIconUrl';
 import { Skeleton } from 'toolkit/chakra/skeleton';
 import { Tooltip } from 'toolkit/chakra/tooltip';
 import * as EntityBase from 'ui/shared/entities/base/components';
+import type { IconName } from 'ui/shared/IconSvg';
 
 import { distributeEntityProps, getContentProps, getIconProps } from '../base/utils';
 import AddressEntityContentProxy from './AddressEntityContentProxy';
@@ -44,11 +46,10 @@ const Icon = (props: IconProps) => {
     return null;
   }
 
-  const marginRight = props.marginRight ?? (props.shield ? '18px' : '8px');
-  const styles = {
-    ...getIconProps(props.variant),
-    marginRight,
-  };
+  const shield = props.shield ?? (props.chain ? { src: getIconUrl(props.chain) } : undefined);
+  const hintPostfix: string = props.hintPostfix ?? (props.chain ? ` on ${ props.chain.config.chain.name } (Chain ID: ${ props.chain.config.chain.id })` : '');
+
+  const styles = getIconProps(props, Boolean(shield));
 
   if (props.isLoading) {
     return <Skeleton { ...styles } loading borderRadius="full" flexShrink={ 0 }/>;
@@ -61,6 +62,7 @@ const Icon = (props: IconProps) => {
       return (
         <EntityBase.Icon
           { ...props }
+          shield={ shield }
           name="brands/safe"
         />
       );
@@ -68,12 +70,13 @@ const Icon = (props: IconProps) => {
 
     const isProxy = Boolean(props.address.implementations?.length);
     const isVerified = isProxy ? props.address.is_verified && props.address.implementations?.every(({ name }) => Boolean(name)) : props.address.is_verified;
-    const contractIconName: EntityBase.IconBaseProps['name'] = props.address.is_verified ? 'contracts/verified' : 'contracts/regular';
-    const label = (isVerified ? 'verified ' : '') + (isProxy ? 'proxy contract' : 'contract') + (props.hintPostfix ?? '');
+    const contractIconName: IconName = props.address.is_verified ? 'contracts/verified' : 'contracts/regular';
+    const label = (isVerified ? 'verified ' : '') + (isProxy ? 'proxy contract' : 'contract') + hintPostfix;
 
     return (
       <EntityBase.Icon
         { ...props }
+        shield={ shield }
         name={ isProxy ? 'contracts/proxy' : contractIconName }
         color={ isVerified ? 'green.500' : undefined }
         borderRadius={ 0 }
@@ -84,7 +87,11 @@ const Icon = (props: IconProps) => {
 
   const label = (() => {
     if (isDelegatedAddress) {
-      return (props.address.is_verified ? 'EOA + verified code' : 'EOA + code') + (props.hintPostfix ?? '');
+      return (props.address.is_verified ? 'EOA + verified code' : 'EOA + code') + hintPostfix;
+    }
+
+    if (props.chain) {
+      return 'Address' + hintPostfix;
     }
 
     return props.hint;
@@ -95,14 +102,14 @@ const Icon = (props: IconProps) => {
       content={ label }
       disabled={ !label }
       interactive={ props.tooltipInteractive }
-      positioning={ props.shield ? { offset: { mainAxis: 8 } } : undefined }
+      positioning={ shield ? { offset: { mainAxis: 8 } } : undefined }
     >
       <Flex marginRight={ styles.marginRight } position="relative">
         <AddressIdenticon
           size={ props.variant === 'heading' ? 30 : 20 }
           hash={ getDisplayedAddress(props.address) }
         />
-        { props.shield && <EntityBase.IconShield { ...props.shield }/> }
+        { shield && <EntityBase.IconShield { ...shield }/> }
         { isDelegatedAddress && <AddressIconDelegated isVerified={ Boolean(props.address.is_verified) }/> }
       </Flex>
     </Tooltip>
@@ -192,6 +199,7 @@ const AddressEntity = (props: EntityProps) => {
   const partsProps = distributeEntityProps(props);
   const highlightContext = useAddressHighlightContext(props.noHighlight);
   const settingsContext = useSettingsContext();
+
   const altHash = !props.noAltHash && settingsContext?.addressFormat === 'bech32' ? toBech32Address(props.address.hash) : undefined;
 
   // inside highlight context all tooltips should be interactive
