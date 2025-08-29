@@ -1,10 +1,10 @@
-import { useWeb3Modal, useWeb3ModalState } from '@web3modal/wagmi/react';
+import { useAppKit, useAppKitState } from '@reown/appkit/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAccount, useDisconnect, useAccountEffect } from 'wagmi';
 
 export default function useWallet() {
-  const { open } = useWeb3Modal();
-  const { open: isOpen } = useWeb3ModalState();
+  const { open } = useAppKit();
+  const { open: isOpen } = useAppKitState();
   const { disconnect } = useDisconnect();
   const [ isModalOpening, setIsModalOpening ] = useState(false);
   const [ isClientLoaded, setIsClientLoaded ] = useState(false);

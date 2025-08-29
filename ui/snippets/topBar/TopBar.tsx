@@ -30,7 +30,7 @@ const TopBar = () => {
             </>
           ) }
           <Settings/>
-          { Boolean(config.UI.navigation.featuredNetworks) && !config.UI.navigation.showFeaturedNetworksByOldUiFlg && (
+          { Boolean(config.UI.featuredNetworks.items) && !config.UI.navigation.showFeaturedNetworksByOldUiFlg && (
             <Box display={{ base: 'none', lg: 'flex' }} alignItems="center">
               <Separator mx={ 3 } height={ 4 } orientation="vertical"/>
               <NetworkMenu/>

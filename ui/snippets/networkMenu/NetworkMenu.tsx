@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { PopoverRoot, PopoverTrigger } from 'toolkit/chakra/popover';
+import { Button } from 'toolkit/chakra/button';
 
-import NetworkMenuButton from './NetworkMenuButton';
-import NetworkMenuContentDesktop from './NetworkMenuContentDesktop';
+import NetworkMenuContent from './NetworkMenuContent';
 import useNetworkMenu from './useNetworkMenu';
 interface Props {
   isCollapsed?: boolean;
@@ -19,15 +19,17 @@ const NetworkMenu = ({ isCollapsed }: Props) => {
       open={ menu.open }
       onOpenChange={ menu.onOpenChange }>
       <PopoverTrigger>
-        <NetworkMenuButton
+        <Button
           marginLeft="auto"
           overflow="hidden"
           width={{ base: '36px', lg: isCollapsed === false ? '36px' : '0px', xl: isCollapsed ? '0px' : '36px' }}
-          isActive={ menu.open }
+          variant={ menu.open ? 'solid' : 'outline' }
           onClick={ menu.onToggle }
-        />
+        >
+          Menu
+        </Button>
       </PopoverTrigger>
-      <NetworkMenuContentDesktop items={ menu.data } tabs={ menu.availableTabs }/>
+      <NetworkMenuContent items={ menu.data } tabs={ menu.availableTabs }/>
     </PopoverRoot>
   );
 };
