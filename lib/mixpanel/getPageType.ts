@@ -40,7 +40,7 @@ export const PAGE_TYPE_DICT: Record<Route['pathname'], string> = {
   '/txn-withdrawals': 'Txn withdrawals',
   '/visualize/sol2uml': 'Solidity UML diagram',
   '/csv-export': 'Export data to CSV file',
-  '/deposits': 'Deposits (L1 > L2)',
+  '/deposits': 'Deposits',
   '/output-roots': 'Output roots',
   '/dispute-games': 'Dispute games',
   '/batches': 'Txn batches',
@@ -65,6 +65,7 @@ export const PAGE_TYPE_DICT: Record<Route['pathname'], string> = {
   '/interop-messages': 'Interop messages',
   '/operations': 'Operations',
   '/operation/[id]': 'Operation details',
+  '/cc/tx/[hash]': 'Cross-chain transaction details',
 
   // multichain routes
   '/chain/[chain-slug]/accounts/label/[slug]': 'Chain addresses search by label',

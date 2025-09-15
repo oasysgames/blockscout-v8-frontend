@@ -172,6 +172,14 @@ export const pools: Guard = (chainConfig: typeof config) => async() => {
   }
 };
 
+export const zetaChainCCTX: Guard = (chainConfig: typeof config) => async() => {
+  if (!chainConfig.features.zetachain.isEnabled) {
+    return {
+      notFound: true,
+    };
+  }
+};
+
 // ROLLUPS
 export const rollup: Guard = (chainConfig: typeof config) => async() => {
   if (!chainConfig.features.rollup.isEnabled) {
@@ -184,7 +192,9 @@ export const rollup: Guard = (chainConfig: typeof config) => async() => {
 const DEPOSITS_ROLLUP_TYPES: Array<RollupType> = [ 'optimistic', 'shibarium', 'zkEvm', 'arbitrum', 'scroll' ];
 export const deposits: Guard = (chainConfig: typeof config) => async() => {
   const rollupFeature = chainConfig.features.rollup;
-  if (!(rollupFeature.isEnabled && DEPOSITS_ROLLUP_TYPES.includes(rollupFeature.type))) {
+  if (
+    !chainConfig.features.beaconChain.isEnabled &&
+    !(rollupFeature.isEnabled && DEPOSITS_ROLLUP_TYPES.includes(rollupFeature.type))) {
     return {
       notFound: true,
     };

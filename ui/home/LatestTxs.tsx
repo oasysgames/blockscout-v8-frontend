@@ -16,6 +16,8 @@ import useNewTxsSocket from 'ui/txs/socket/useTxsSocketTypeAll';
 import LatestTxsItem from './LatestTxsItem';
 import LatestTxsItemMobile from './LatestTxsItemMobile';
 
+const zetachainFeature = config.features.zetachain;
+
 const LatestTransactions = () => {
   const isMobile = useIsMobile();
   const txsCount = isMobile ? 2 : 6;
@@ -35,7 +37,7 @@ const LatestTransactions = () => {
   }
 
   if (data) {
-    const txsUrl = route({ pathname: '/txs' });
+    const txsUrl = route({ pathname: `/txs`, query: zetachainFeature.isEnabled ? { tab: 'evm' } : undefined });
     return (
       <>
         <SocketNewItemsNotice borderBottomRadius={ 0 } url={ txsUrl } num={ num } showErrorAlert={ showErrorAlert } isLoading={ isPlaceholderData }/>

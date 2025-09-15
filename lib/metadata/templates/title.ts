@@ -42,7 +42,7 @@ const TEMPLATE_MAP: Record<Route['pathname'], string> = {
   '/txn-withdrawals': '%network_name% L2 to L1 message relayer',
   '/visualize/sol2uml': '%network_name% Solidity UML diagram',
   '/csv-export': '%network_name% export data to CSV',
-  '/deposits': '%network_name% deposits (L1 > L2)',
+  '/deposits': '%network_name% deposits - track on %network_name% explorer',
   '/output-roots': '%network_name% output roots',
   '/dispute-games': '%network_name% dispute games',
   '/batches': '%network_name% txn batches',
@@ -67,6 +67,7 @@ const TEMPLATE_MAP: Record<Route['pathname'], string> = {
   '/interop-messages': '%network_name% interop messages',
   '/operations': '%network_name% operations',
   '/operation/[id]': '%network_name% operation %id%',
+  '/cc/tx/[hash]': '%network_name% cross-chain transaction %hash% details',
 
   // multichain routes
   '/chain/[chain-slug]/accounts/label/[slug]': '%network_name% addresses search by label',
