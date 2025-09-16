@@ -6,6 +6,7 @@ import config from 'configs/app';
 import { useScrollDirection } from 'lib/contexts/scrollDirection';
 import RewardsButton from 'ui/rewards/RewardsButton';
 import NetworkLogo from 'ui/snippets/networkMenu/NetworkLogo';
+import NetworkMenu from 'ui/snippets/networkMenu/NetworkMenu';
 import SearchBar from 'ui/snippets/searchBar/SearchBar';
 import UserProfileMobile from 'ui/snippets/user/profile/UserProfileMobile';
 import UserWalletMobile from 'ui/snippets/user/wallet/UserWalletMobile';
@@ -49,6 +50,7 @@ const HeaderMobile = ({ hideSearchBar, renderSearchBar }: Props) => {
         <Burger/>
         <NetworkLogo ml={ 2 } mr="auto"/>
         <Flex columnGap={ 2 }>
+          { config.UI.navigation.showFeaturedNetworksByOldUiFlg && <NetworkMenu/> }
           { config.features.rewards.isEnabled && <RewardsButton/> }
           {
             (config.features.account.isEnabled && <UserProfileMobile/>) ||

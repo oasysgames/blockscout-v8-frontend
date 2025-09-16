@@ -20,7 +20,7 @@ const NetworkMenu = ({ isCollapsed }: Props) => {
       onOpenChange={ menu.onOpenChange }>
       <PopoverTrigger>
         <NetworkMenuButton
-          marginLeft="auto"
+          marginLeft={{ base: '0', lg: 'auto' }}
           overflow="hidden"
           width={{ base: '36px', lg: isCollapsed === false ? '36px' : '0px', xl: isCollapsed ? '0px' : '36px' }}
           isActive={ menu.open }
