@@ -189,19 +189,17 @@ export const rollup: Guard = (chainConfig: typeof config) => async() => {
   }
 };
 
-const DEPOSITS_ROLLUP_TYPES: Array<RollupType> = [ 'optimistic', 'shibarium', 'zkEvm', 'arbitrum', 'scroll' ];
+const DEPOSITS_ROLLUP_TYPES: Array<RollupType> = [ 'optimistic', 'shibarium', 'zkEvm', 'arbitrum', 'scroll', 'oasys' ];
 export const deposits: Guard = (chainConfig: typeof config) => async() => {
   const rollupFeature = chainConfig.features.rollup;
-  if (
-    !chainConfig.features.beaconChain.isEnabled &&
-    !(rollupFeature.isEnabled && DEPOSITS_ROLLUP_TYPES.includes(rollupFeature.type))) {
+  if (!(rollupFeature.isEnabled && DEPOSITS_ROLLUP_TYPES.includes(rollupFeature.type))) {
     return {
       notFound: true,
     };
   }
 };
 
-const WITHDRAWALS_ROLLUP_TYPES: Array<RollupType> = [ 'optimistic', 'shibarium', 'zkEvm', 'arbitrum', 'scroll' ];
+const WITHDRAWALS_ROLLUP_TYPES: Array<RollupType> = [ 'optimistic', 'shibarium', 'zkEvm', 'arbitrum', 'scroll', 'oasys' ];
 export const withdrawals: Guard = (chainConfig: typeof config) => async() => {
   const rollupFeature = chainConfig.features.rollup;
   if (
