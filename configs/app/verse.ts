@@ -138,6 +138,7 @@ export default Object.freeze({
   },
   bridge: {
     isVisible: getEnvValue('NEXT_PUBLIC_MENU_BRIDGE_VISIBLE') === 'true',
+    hasL2ChainId: Boolean(getEnvValue('NEXT_PUBLIC_L2_CHAIN_ID')),
     l1BridgeAddress: getEnvValue('NEXT_PUBLIC_L1_BRIDGE_ADDRESS') || '0x9245e19eB88de2534E03E764FB2a5f194e6d97AD',
     l2ChainId: getEnvValue('NEXT_PUBLIC_L2_CHAIN_ID') || 2400,
     l2ChainName: getChainName,

@@ -236,7 +236,7 @@ export default function useNavItems(): ReturnType {
         validators,
         verifiedContracts,
         ensLookup,
-        config.features.beaconChain.isEnabled && {
+        rollupFeature.isEnabled && Boolean(config.verse.bridge.hasL2ChainId) && {
           text: 'Deposits',
           nextRoute: { pathname: '/deposits' as const },
           icon: 'arrows/south-east',
