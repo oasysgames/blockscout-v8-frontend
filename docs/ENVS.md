@@ -113,7 +113,7 @@ All json-like values should be single-quoted. If it contains a hash (`#`) or a d
 | NEXT_PUBLIC_NETWORK_CURRENCY_DECIMALS | `string` | Network currency decimals | - | `18` | `6` | v1.0.x+ |
 | NEXT_PUBLIC_NETWORK_SECONDARY_COIN_SYMBOL | `string` | Network secondary coin symbol.  | - | - | `GNO` | v1.29.0+ |
 | NEXT_PUBLIC_NETWORK_MULTIPLE_GAS_CURRENCIES | `boolean` | Set to `true` for networks where users can pay transaction fees in either the native coin or ERC-20 tokens.  | - | `false` | `true` | v1.33.0+ |
-| NEXT_PUBLIC_NETWORK_VERIFICATION_TYPE | `validation` \| `mining` | Verification type in the network. Irrelevant for Arbitrum (verification type is always `posting`) and ZkEvm (verification type is always `sequencing`) L2s | - | `mining` | `validation` | v1.0.x+ |
+| NEXT_PUBLIC_NETWORK_VERIFICATION_TYPE | `validation` \| `mining` \| 'fee reception' | Verification type in the network. Irrelevant for Arbitrum (verification type is always `posting`) and ZkEvm (verification type is always `sequencing`) L2s | - | `mining` | `validation` | v1.0.x+ |
 | NEXT_PUBLIC_NETWORK_TOKEN_STANDARD_NAME | `string` | Name of the standard for creating tokens | - | `ERC` | `BEP` | v1.31.0+ |
 | NEXT_PUBLIC_IS_TESTNET | `boolean`| Set to true if network is testnet | - | `false` | `true` | v1.0.x+ |
 | NEXT_PUBLIC_NETWORK_CURRENCY_IMAGE | `string` | Network currency coin image | - | - | `https://assets.coingecko.com/coins/images/27909/standard/OAS.png` | v1.38.x+ |
@@ -306,6 +306,7 @@ Settings for meta tags, OG tags and SEO
 | --- | --- | --- | --- | --- | --- | --- |
 | NEXT_PUBLIC_VIEWS_TX_HIDDEN_FIELDS | `Array<TxFieldsId>` | Array of the transaction fields ids that should be hidden. See below the list of the possible id values. | - | - | `'["value","tx_fee"]'` | v1.15.0+ |
 | NEXT_PUBLIC_VIEWS_TX_ADDITIONAL_FIELDS | `Array<TxAdditionalFieldsId>` | Array of the additional fields ids that should be added to the transaction details. See below the list of the possible id values. | - | - | `'["fee_per_gas"]'` | v1.15.0+ |
+| NEXT_PUBLIC_VIEWS_TX_GROUPED_FEES | `boolean` | In the detailed view group transaction fees under one collapsible section. | - | - | `true` | v2.3.5+ |
 
 ##### Transaction fields list
 | Id | Description |
@@ -323,6 +324,7 @@ Settings for meta tags, OG tags and SEO
 | Id | Description |
 | --- | --- |
 | `fee_per_gas` | Amount of total fee divided by total amount of gas used by transaction |
+| `set_max_gas_limit` | Max gas price established by the sender |
 
 &nbsp;
 
@@ -995,8 +997,7 @@ This feature enables cross-chain transactions pages and views on ZetaChain insta
 | --- | --- | --- | --- | --- | --- | --- |
 | NEXT_PUBLIC_ZETACHAIN_SERVICE_API_HOST | `string` | ZetaChain cross-chain transactions service API endpoint url | - | - | `https://zetachain-cctx.services.blockscout.com` | v2.3.2+ |
 | NEXT_PUBLIC_ZETACHAIN_SERVICE_CHAINS_CONFIG_URL | `string` | URL of configuration file (`.json` format only) which contains chains info for the supported chains. | - | - | `https://example.com/zetachain_chains_config.json` | v2.3.2+ |
-| NEXT_PUBLIC_ZETACHAIN_COSMOS_TX_URL_TEMPLATE | `string` | URL template to redirect cosmos tx search. | - | - | `https://example.com/cosmos/tx/{hash}` | v2.3.2+ |
-| NEXT_PUBLIC_ZETACHAIN_COSMOS_ADDRESS_URL_TEMPLATE | `string` URL template to redirect cosmos address search. | - | - | `https://example.com/cosmos/address/{hash}` | v2.3.2+ |
+| NEXT_PUBLIC_ZETACHAIN_EXTERNAL_SEARCH_CONFIG | `Array<{ regex: string; template: string }>` | List of objects with regex, template and name fields to build redirect links for external searches. The first matching regex will be used to generate the URL from the provided hash. | - | - | `'[{"regex":"^0x[0-9a-fA-F]{64}$","template":"https://example.com/cosmos/tx/{hash}","name":"Cosmos SDK style transaction"}]'` | v2.4.0+ |
 
 
 #### ZetaChain supported cain configuration properties
