@@ -3,6 +3,8 @@ import React from 'react';
 
 import type { TokenInfo, TokenInstance } from 'types/api/token';
 
+import config from 'configs/app';
+import { useAppContext } from 'lib/contexts/app';
 import { useMultichainContext } from 'lib/contexts/multichain';
 import { getTokenTypeName } from 'lib/token/tokenTypes';
 import { Link } from 'toolkit/chakra/link';
@@ -34,7 +36,19 @@ const TokenInstancePageTitle = ({ isLoading, token, instance, hash }: Props) => 
     }
 
     if (token?.name || token?.symbol) {
-      return (token.name || token.symbol) + ' #' + instance.id;
+      let symbol = token.symbol;
+      let tokenName = token.name;
+
+      // Check if the token address exists in the tokens list
+      if (token.address_hash) {
+        const updatedToken = config.verse.tokens.findByAddress(token.address_hash);
+        if (updatedToken) {
+          tokenName = updatedToken.name;
+          symbol = updatedToken.symbol;
+        }
+      }
+      
+      return (tokenName || symbol) + ' #' + instance.id;
     }
 
     return `ID ${ instance.id }`;

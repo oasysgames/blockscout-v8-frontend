@@ -26,6 +26,7 @@ interface Props {
   margin?: ChartMargin;
   noAnimation?: boolean;
   resolution?: Resolution;
+  valueFormatter?: (value: number) => string;
 }
 
 const DEFAULT_CHART_MARGIN = { bottom: 20, left: 10, right: 20, top: 10 };
@@ -40,6 +41,7 @@ const ChartWidgetGraph = ({
   noAnimation,
   resolution,
   zoomRange,
+  valueFormatter,
 }: Props) => {
   const isMobile = useIsMobile();
   const [ color ] = useToken('colors', useColorModeValue('theme.graph.line._light', 'theme.graph.line._dark'));
@@ -58,7 +60,13 @@ const ChartWidgetGraph = ({
       })),
   [ items, range, resolution ]);
 
-  const chartData: TimeChartData = React.useMemo(() => ([ { items: displayedData, name: 'Value', color, units } ]), [ color, displayedData, units ]);
+  const chartData: TimeChartData = React.useMemo(() => ([{
+    items: displayedData,
+    name: 'Value',
+    color,
+    units,
+    valueFormatter
+  }]), [ color, displayedData, units, valueFormatter ]);
 
   const margin: ChartMargin = React.useMemo(() => ({ ...DEFAULT_CHART_MARGIN, ...marginProps }), [ marginProps ]);
   const axesConfig = React.useMemo(() => {

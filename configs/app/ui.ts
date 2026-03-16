@@ -55,6 +55,7 @@ const UI = Object.freeze({
     highlightedRoutes,
     otherLinks: parseEnvJson<Array<NavItemExternal>>(getEnvValue('NEXT_PUBLIC_OTHER_LINKS')) || [],
     layout: (getEnvValue('NEXT_PUBLIC_NAVIGATION_LAYOUT') || 'vertical') as NavigationLayout,
+    showFeaturedNetworksByOldUiFlg: getEnvValue('NEXT_PUBLIC_SHOW_FEATURED_NETWORKS_BY_OLD_UI') === 'true' ? true : false,
     promoBanner: navigationPromoBanner,
   },
   featuredNetworks: {

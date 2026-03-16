@@ -59,6 +59,11 @@ const LatestBlocks = () => {
         return newData;
       }
 
+      // In case there is 1 tx of op-node, it will not appear
+      if (config.verse.opNode.isHiddenTxs && payload.block.transactions_count <= 1) {
+        return newData;
+      }
+      
       return [ payload.block, ...newData ].sort((b1, b2) => b2.height - b1.height).slice(0, blocksMaxCount);
     });
   }, [ queryClient, blocksMaxCount ]);
@@ -80,7 +85,11 @@ const LatestBlocks = () => {
   }
 
   if (data) {
-    const dataToShow = data.slice(0, blocksMaxCount);
+    // filter block with transaction_count > 1 when config.verse.opNode.isHiddenTxs là true
+    const filteredData = config.verse.opNode.isHiddenTxs 
+      ? data.filter(block => block.transactions_count > 1)
+      : data;
+    const dataToShow = filteredData.slice(0, blocksMaxCount);
 
     content = (
       <>

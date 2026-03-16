@@ -38,6 +38,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/block/countdown/[height]", { "height": string }>
     | StaticRoute<"/block/countdown">
     | StaticRoute<"/blocks">
+    | StaticRoute<"/bridge">
     | DynamicRoute<"/cc/tx/[hash]", { "hash": string }>
     | DynamicRoute<"/chain/[chain-slug]/accounts/label/[slug]", { "chain-slug": string; "slug": string }>
     | DynamicRoute<"/chain/[chain-slug]/advanced-filter", { "chain-slug": string }>
@@ -56,6 +57,8 @@ declare module "nextjs-routes" {
     | StaticRoute<"/dispute-games">
     | DynamicRoute<"/epochs/[number]", { "number": string }>
     | StaticRoute<"/epochs">
+    | DynamicRoute<"/experiment/[id]", { "id": string }>
+    | StaticRoute<"/experiment">
     | StaticRoute<"/gas-tracker">
     | StaticRoute<"/">
     | StaticRoute<"/internal-txs">

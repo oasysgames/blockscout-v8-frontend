@@ -52,7 +52,29 @@ const TokenPageTitle = ({ tokenQuery, addressQuery, hash }: Props) => {
     addressQuery.isPlaceholderData ||
     (config.features.verifiedTokens.isEnabled && verifiedInfoQuery.isPending);
 
-  const tokenSymbolText = tokenQuery.data?.symbol ? ` (${ tokenQuery.data.symbol })` : '';
+  const [ isSocketOpen, setIsSocketOpen ] = React.useState(false);
+
+  let symbol = tokenQuery.data?.symbol;
+  let tokenName = tokenQuery.data?.name;
+
+  // Check if the token address exists in the tokens list
+  if (tokenQuery.data?.address_hash) {
+    const updatedToken = config.verse.tokens.findByAddress(tokenQuery.data.address_hash);
+    if (updatedToken) {
+      tokenName = updatedToken.name;
+      symbol = updatedToken.symbol;
+    }
+  }
+
+  // Create the title string with token name and symbol
+  const title = React.useMemo(() => {
+    if (!tokenQuery.data) {
+      return '';
+    }
+
+    const titleString = `${tokenName || 'Unnamed token'}${symbol ? ` (${symbol})` : ''}`;
+    return titleString;
+  }, [tokenQuery.data, tokenName, symbol]);
 
   const [ bridgedTokenTagBgColor ] = useToken('colors', 'blue.500');
   const [ bridgedTokenTagTextColor ] = useToken('colors', 'white');
@@ -127,10 +149,11 @@ const TokenPageTitle = ({ tokenQuery, addressQuery, hash }: Props) => {
     </Flex>
   );
 
+
   return (
     <>
       <PageTitle
-        title={ `${ tokenQuery.data?.name || 'Unnamed token' }${ tokenSymbolText }` }
+        title={ title }
         isLoading={ tokenQuery.isPlaceholderData }
         beforeTitle={ tokenQuery.data ? (
           <TokenEntity.Icon

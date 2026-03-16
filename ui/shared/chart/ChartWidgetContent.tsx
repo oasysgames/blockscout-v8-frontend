@@ -23,6 +23,7 @@ export type Props = {
   isEnlarged?: boolean;
   noAnimation?: boolean;
   resolution?: Resolution;
+  valueFormatter?: (value: number) => string;
 };
 
 const ChartWidgetContent = ({
@@ -37,6 +38,7 @@ const ChartWidgetContent = ({
   isEnlarged,
   noAnimation,
   resolution,
+  valueFormatter,
 }: Props) => {
   const hasItems = items && items.length > 2;
 
@@ -83,8 +85,9 @@ const ChartWidgetContent = ({
         isEnlarged={ isEnlarged }
         noAnimation={ noAnimation }
         resolution={ resolution }
+        valueFormatter={ valueFormatter }
       />
-      <ChartWatermarkIcon w="162px" h="15%"/>
+      {/* <ChartWatermarkIcon w="162px" h="15%"/> */}
     </Box>
   );
 };

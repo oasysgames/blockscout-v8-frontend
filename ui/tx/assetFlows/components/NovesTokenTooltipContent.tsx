@@ -4,6 +4,7 @@ import React from 'react';
 
 import type { NovesNft, NovesToken } from 'types/api/noves';
 
+import config from 'configs/app';
 import { HEX_REGEXP } from 'toolkit/utils/regexp';
 import CopyToClipboard from 'ui/shared/CopyToClipboard';
 
@@ -17,7 +18,19 @@ const NovesTokenTooltipContent: FC<Props> = ({ token, amount }) => {
     return null;
   }
 
-  const showTokenName = token.symbol !== token.name;
+  let symbol = token.symbol;
+  let tokenName = token.name;
+  
+  // Check if the token address exists in the tokens list
+  if (token.address) {
+    const updatedToken = config.verse.tokens.findByAddress(token.address);
+    if (updatedToken) {
+      tokenName = updatedToken.name;
+      symbol = updatedToken.symbol;
+    }
+  }
+
+  const showTokenName = symbol !== tokenName;
   const showTokenAddress = HEX_REGEXP.test(token.address);
 
   return (
@@ -27,7 +40,7 @@ const NovesTokenTooltipContent: FC<Props> = ({ token, amount }) => {
           { amount }
         </Text>
         <Text color="inherit" as="span" ml={ 1 }>
-          { token.symbol }
+          { symbol }
         </Text>
       </Text>
 

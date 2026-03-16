@@ -4,6 +4,7 @@ import React from 'react';
 import type { ItemsProps } from './types';
 import type { SearchResultAddressOrContract, SearchResultMetadataTag } from 'types/api/search';
 
+import config from 'configs/app';
 import { toBech32Address } from 'lib/address/bech32';
 import dayjs from 'lib/date/dayjs';
 import highlightText from 'lib/highlightText';
@@ -31,7 +32,16 @@ const SearchBarSuggestAddress = ({ data, isMobile, searchTerm, addressFormat }: 
       }}
     />
   );
-  const addressName = data.name || data.ens_info?.name;
+  let addressName = data.name || data.ens_info?.name;
+
+  // Check if the address exists in the tokens list
+  if (data.address_hash) {
+    const updatedToken = config.verse.tokens.findByAddress(data.address_hash);
+    if (updatedToken) {
+      addressName = updatedToken.name;
+    }
+  }
+
   const expiresText = data.ens_info?.expiry_date ? ` (expires ${ dayjs(data.ens_info.expiry_date).fromNow() })` : '';
 
   const nameEl = addressName && (

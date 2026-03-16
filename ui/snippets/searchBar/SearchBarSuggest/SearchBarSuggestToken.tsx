@@ -4,6 +4,7 @@ import React from 'react';
 import type { ItemsProps } from './types';
 import type { SearchResultToken } from 'types/api/search';
 
+import config from 'configs/app';
 import { toBech32Address } from 'lib/address/bech32';
 import highlightText from 'lib/highlightText';
 import ContractCertifiedLabel from 'ui/shared/ContractCertifiedLabel';
@@ -14,6 +15,18 @@ import IconSvg from 'ui/shared/IconSvg';
 const SearchBarSuggestToken = ({ data, isMobile, searchTerm, addressFormat }: ItemsProps<SearchResultToken>) => {
   const icon = <TokenEntity.Icon token={{ ...data, type: data.token_type }}/>;
   const verifiedIcon = <IconSvg name="certified" boxSize={ 4 } color="green.500" ml={ 1 } flexShrink={ 0 }/>;
+  let symbol = data.symbol;
+  let tokenName = data.name;
+  
+  // Check if the token address exists in the tokens list
+  if (data.address_hash) {
+    const updatedToken = config.verse.tokens.findByAddress(data.address_hash);
+    if (updatedToken) {
+      tokenName = updatedToken.name;
+      symbol = updatedToken.symbol;
+    }
+  }
+
   const certifiedIcon = <ContractCertifiedLabel iconSize={ 4 } boxSize={ 4 } ml={ 1 } flexShrink={ 0 }/>;
   const hash = data.filecoin_robust_address || (addressFormat === 'bech32' ? toBech32Address(data.address_hash) : data.address_hash);
 
@@ -24,7 +37,7 @@ const SearchBarSuggestToken = ({ data, isMobile, searchTerm, addressFormat }: It
       whiteSpace="nowrap"
       textOverflow="ellipsis"
     >
-      <span dangerouslySetInnerHTML={{ __html: highlightText(data.name + (data.symbol ? ` (${ data.symbol })` : ''), searchTerm) }}/>
+      <span dangerouslySetInnerHTML={{ __html: highlightText(tokenName + (symbol ? ` (${ symbol })` : ''), searchTerm) }}/>
     </Text>
   );
 

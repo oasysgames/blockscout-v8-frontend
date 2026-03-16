@@ -4,6 +4,7 @@ import React from 'react';
 import type { TokenInstance } from 'types/api/token';
 import type { TokenTransfer } from 'types/api/tokenTransfer';
 
+import config from 'configs/app';
 import getCurrencyValue from 'lib/getCurrencyValue';
 import { NFT_TOKEN_TYPE_IDS } from 'lib/token/tokenTypes';
 import { Badge } from 'toolkit/chakra/badge';
@@ -29,6 +30,16 @@ const TokenTransferListItem = ({
   isLoading,
   instance,
 }: Props) => {
+  let symbol = token?.symbol;
+  
+  // Check if the token address exists in the tokens list
+  if (token?.address_hash) {
+    const updatedToken = config.verse.tokens.findByAddress(token.address_hash);
+    if (updatedToken) {
+      symbol = updatedToken.symbol;
+    }
+  }
+
   const { usd, valueStr } = total && 'value' in total && total.value !== null ? getCurrencyValue({
     value: total.value,
     exchangeRate: token?.exchange_rate,
@@ -80,7 +91,7 @@ const TokenTransferListItem = ({
           >
             <span>{ valueStr }</span>
           </Skeleton>
-          { token.symbol && <TruncatedValue isLoading={ isLoading } value={ token.symbol }/> }
+          { symbol && <TruncatedValue isLoading={ isLoading } value={ symbol }/> }
           { usd && (
             <Skeleton
               loading={ isLoading }

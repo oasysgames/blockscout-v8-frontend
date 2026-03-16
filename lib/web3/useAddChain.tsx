@@ -1,8 +1,10 @@
+import { get } from 'es-toolkit/compat';
 import React from 'react';
 import type { AddEthereumChainParameter } from 'viem';
 
 import config from 'configs/app';
 import { useMultichainContext } from 'lib/contexts/multichain';
+import getErrorObj from 'lib/errors/getErrorObj';
 import { SECOND } from 'toolkit/utils/consts';
 
 import useRewardsActivity from '../hooks/useRewardsActivity';
@@ -41,10 +43,24 @@ export default function useAddChain() {
 
     const start = Date.now();
 
-    await provider.request({
-      method: 'wallet_addEthereumChain',
-      params: [ getParams(chainConfig) ],
-    });
+    try {
+      await provider.request({
+        method: 'wallet_addEthereumChain',
+        params: [ getParams(chainConfig) ],
+      });
+    } catch (error) {
+      const errorObj = getErrorObj(error);
+      const code = get(errorObj, 'code');
+      if (code === -32603) {
+        console.warn('Chain already added or not supported');
+        return;
+      }
+
+      // Throw error
+      if (code !== -32603) {
+        throw error;
+      }
+    }
 
     // if network is already added, the promise resolves immediately
     if (Date.now() - start > SECOND) {

@@ -88,6 +88,15 @@ const TokenDetails = ({ tokenQuery }: Props) => {
   } = tokenQuery.data || {};
 
   let totalSupplyValue;
+  let symbolTxt = symbol;
+
+  // Check if the token address exists in the tokens list
+  if (tokenQuery.data) {
+    const updatedToken = config.verse.tokens.findByAddress(tokenQuery.data?.address_hash);
+    if (updatedToken) {
+      symbolTxt = updatedToken.symbol;
+    }
+  }
 
   if (decimals) {
     const totalValue = totalSupply ? getCurrencyValue({ value: totalSupply, accuracy: 3, accuracyUsd: 2, exchangeRate, decimals }) : undefined;
@@ -144,7 +153,7 @@ const TokenDetails = ({ tokenQuery }: Props) => {
         <Skeleton loading={ tokenQuery.isPlaceholderData } w="100%" display="flex">
           <TruncatedValue value={ totalSupplyValue || '0' } maxW="80%" flexShrink={ 0 }/>
           <Box flexShrink={ 0 }> </Box>
-          <TruncatedValue value={ symbol || '' }/>
+          <TruncatedValue value={ symbolTxt || '' }/>
         </Skeleton>
       </DetailedInfo.ItemValue>
 

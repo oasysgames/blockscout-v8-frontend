@@ -7,6 +7,7 @@ import config from 'configs/app';
 import useApiQuery from 'lib/api/useApiQuery';
 import { AddressHighlightProvider } from 'lib/contexts/addressHighlight';
 import useIsMobile from 'lib/hooks/useIsMobile';
+import useNewHomeTxsSocket from 'lib/hooks/useNewHomeTxsSocket';
 import { TX } from 'stubs/tx';
 import { Link } from 'toolkit/chakra/link';
 import SocketNewItemsNotice from 'ui/shared/SocketNewItemsNotice';
@@ -26,6 +27,9 @@ const LatestTransactions = () => {
     },
   });
 
+  const homeTxsSocket = useNewHomeTxsSocket();
+  const newTxsSocket = useNewTxsSocket({ type: 'txs_home', isLoading: isPlaceholderData });
+  // in case don't want to show tx of op-node
   const { num, showErrorAlert } = useNewTxsSocket({ type: 'txs_home', isLoading: isPlaceholderData });
 
   if (isError) {

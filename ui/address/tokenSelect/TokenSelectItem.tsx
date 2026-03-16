@@ -20,6 +20,15 @@ interface Props {
 }
 
 const TokenSelectItem = ({ data }: Props) => {
+  let symbol = data.token.symbol;
+
+  // Check if the token address exists in the tokens list
+  if (data.token.address_hash) {
+    const updatedToken = config.verse.tokens.findByAddress(data.token.address_hash);
+    if (updatedToken) {
+      symbol = updatedToken.symbol;
+    }
+  }
 
   const isNativeToken = celoFeature.isEnabled && data.token.address_hash.toLowerCase() === celoFeature.nativeTokenAddress?.toLowerCase();
 
@@ -27,7 +36,7 @@ const TokenSelectItem = ({ data }: Props) => {
     switch (data.token.type) {
       case 'ERC-20': {
         const tokenDecimals = Number(data.token.decimals ?? 18);
-        const text = `${ BigNumber(data.value).dividedBy(10 ** tokenDecimals).dp(8).toFormat() } ${ data.token.symbol || '' }`;
+        const text = `${ BigNumber(data.value).dividedBy(10 ** tokenDecimals).dp(8).toFormat() } ${ symbol || '' }`;
 
         return (
           <>
@@ -37,7 +46,7 @@ const TokenSelectItem = ({ data }: Props) => {
         );
       }
       case 'ERC-721': {
-        const text = `${ BigNumber(data.value).toFormat() } ${ data.token.symbol || '' }`;
+        const text = `${ BigNumber(data.value).toFormat() } ${ symbol || '' }`;
         return <TruncatedValue value={ text }/>;
       }
       case 'ERC-1155': {

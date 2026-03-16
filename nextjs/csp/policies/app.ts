@@ -1,5 +1,6 @@
 import type CspDev from 'csp-dev';
 
+import { getFeaturePayload } from 'configs/app/features/types';
 import config from 'configs/app';
 
 import { KEY_WORDS } from '../utils';
@@ -36,15 +37,18 @@ export function app(): CspDev.DirectiveDescriptor {
 
       // webpack hmr in safari doesn't recognize localhost as 'self' for some reason
       config.app.isDev ? 'ws://localhost:3000/_next/webpack-hmr' : '',
-
       // APIs
+
+      // getFeaturePayload(config.features.rewards)?.api.endpoint,
+      getFeaturePayload(config.features.experiment)?.api.endpoint,
       ...Object.values(config.apis).filter(Boolean).map((api) => api.endpoint),
       ...Object.values(config.apis).filter(Boolean).map((api) => api.socketEndpoint),
 
       // chain RPC server
       ...config.chain.rpcUrls,
       'https://infragrid.v.network', // RPC providers
-
+      'https://rpc.mainnet.oasys.games', // In case using bridge, it requires to connect to L1 Mainnet RPC
+      'https://rpc.testnet.oasys.games', // In case using bridge, it requires to connect to L1 Testnet RPC
       // github (spec for api-docs page)
       'raw.githubusercontent.com',
 
@@ -128,7 +132,7 @@ export function app(): CspDev.DirectiveDescriptor {
       KEY_WORDS.SELF,
 
       // allow remix.ethereum.org to embed our contract page in iframe
-      'remix.ethereum.org',
+      // 'remix.ethereum.org',
     ],
   };
 }

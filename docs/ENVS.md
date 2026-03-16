@@ -116,6 +116,7 @@ All json-like values should be single-quoted. If it contains a hash (`#`) or a d
 | NEXT_PUBLIC_NETWORK_VERIFICATION_TYPE | `validation` \| `mining` | Verification type in the network. Irrelevant for Arbitrum (verification type is always `posting`) and ZkEvm (verification type is always `sequencing`) L2s | - | `mining` | `validation` | v1.0.x+ |
 | NEXT_PUBLIC_NETWORK_TOKEN_STANDARD_NAME | `string` | Name of the standard for creating tokens | - | `ERC` | `BEP` | v1.31.0+ |
 | NEXT_PUBLIC_IS_TESTNET | `boolean`| Set to true if network is testnet | - | `false` | `true` | v1.0.x+ |
+| NEXT_PUBLIC_NETWORK_CURRENCY_IMAGE | `string` | Network currency coin image | - | - | `https://assets.coingecko.com/coins/images/27909/standard/OAS.png` | v1.38.x+ |
 
 &nbsp;
 
@@ -142,6 +143,7 @@ All json-like values should be single-quoted. If it contains a hash (`#`) or a d
 | NEXT_PUBLIC_HOMEPAGE_PLATE_TEXT_COLOR | `string` | Text color of the hero plate on the homepage (escape "#" symbol if you use HEX color codes or use rgba-value instead). **DEPRECATED** _Use `NEXT_PUBLIC_HOMEPAGE_HERO_BANNER_CONFIG` instead_  | - | `white` | `\#DCFE76` | v1.0.x+ |
 | NEXT_PUBLIC_HOMEPAGE_PLATE_BACKGROUND | `string` | Background css value for hero plate on the homepage (escape "#" symbol if you use HEX color codes or use rgba-value instead). **DEPRECATED** _Use `NEXT_PUBLIC_HOMEPAGE_HERO_BANNER_CONFIG` instead_  | - | `radial-gradient(103.03% 103.03% at 0% 0%, rgba(183, 148, 244, 0.8) 0%, rgba(0, 163, 196, 0.8) 100%), var(--chakra-colors-blue-400)` | `radial-gradient(at 15% 86%, hsla(350,65%,70%,1) 0px, transparent 50%)` \| `no-repeat bottom 20% right 0px/100% url(https://placekitten/1400/200)` | v1.1.0+ |
 | NEXT_PUBLIC_HOMEPAGE_HERO_BANNER_CONFIG | `HeroBannerConfig`, see details [below](#hero-banner-configuration-properties) | Configuration of hero banner appearance. | - | - | See [below](#hero-banner-configuration-properties) | v1.35.0+ |
+| NEXT_PUBLIC_HOMEPAGE_HIDDEN_OP_NODE_TXS | `boolean` | Set to true if op-node transactions will not appear | - | `true` | `false` | v1.35.x+ |
 
 #### Hero banner configuration properties
 
@@ -165,9 +167,15 @@ _Note_ Here, all values are arrays of up to two strings. The first string repres
 | NEXT_PUBLIC_NETWORK_LOGO_DARK | `string` | Network logo for dark color mode; if not provided, **inverted** regular logo will be used instead | - | - | `https://placekitten.com/240/40` | v1.0.x+ |
 | NEXT_PUBLIC_NETWORK_ICON | `string` | Network icon; used as a replacement for regular network logo when nav bar is collapsed; if not provided, placeholder will be shown; *Note* the icon size should be at least 60px by 60px | - | - | `https://placekitten.com/60/60` | v1.0.x+ |
 | NEXT_PUBLIC_NETWORK_ICON_DARK | `string` | Network icon for dark color mode; if not provided, **inverted** regular icon will be used instead | - | - | `https://placekitten.com/60/60` | v1.0.x+ |
+| NEXT_PUBLIC_FEATURED_NETWORKS | `string` | URL of configuration file (`.json` format only) or file content string representation. It contains list of featured networks that will be shown in the network menu. See [below](#featured-network-configuration-properties) list of available properties for particular network | - | - | `https://example.com/featured_networks_config.json` \| `[{'title':'Astar(EVM)','url':'https://astar.blockscout.com/','group':'Mainnets','icon':'https://example.com/astar.svg'}]` | v1.0.x+ |
+| NEXT_PUBLIC_SHOW_FEATURED_NETWORKS_BY_OLD_UI | `boolean` | Set to `true` to display the FEATURED NETWORKS button with the legacy UI style | - | `false` | `true` | v2.0.3+ |
 | NEXT_PUBLIC_OTHER_LINKS | `Array<{url: string; text: string}>` | List of links for the "Other" navigation menu | - | - | `[{'url':'https://blockscout.com','text':'Blockscout'}]` | v1.0.x+ |
 | NEXT_PUBLIC_NAVIGATION_HIGHLIGHTED_ROUTES | `Array<string>` | List of menu item routes that should have a lightning label | - | - | `['/accounts']` | v1.31.0+ |
 | NEXT_PUBLIC_NAVIGATION_LAYOUT | `vertical \| horizontal` | Navigation menu layout type | - | `vertical` | `horizontal` | v1.32.0+ |
+| NEXT_PUBLIC_MENU_BRIDGE_VISIBLE | `boolean` | Set to true to show bridged Token | - | - | `false` | v1.32.x+ |
+| NEXT_PUBLIC_L2_CHAIN_ID | `number` | Chain id, see [https://chainlist.org](https://chainlist.org) for the reference | - | -  | `99` | v1.33.x+ |
+| NEXT_PUBLIC_L1_BRIDGE_ADDRESS |  `string` | L1 Bridge Address | - | - | `0x9245e19eB88de2534E03E764FB2a5f194e6d97AD` | v2.0.x+ |
+| NEXT_PUBLIC_VERSE_VERSION | `0 or 1` | Verse version | - | 0 | `1` | v1.33.x+ |
 | NEXT_PUBLIC_NAVIGATION_PROMO_BANNER_CONFIG | `string` | Configuration of promo banner in the navigation menu. See [below](#navigation-promo-banner-configuration-properties) list of available properties for particular banner type | - | - | `{'img_url': 'https://example.com/promo.svg', 'text': 'Promo text', 'bg_color': {'light': 'rgb(250, 245, 255)', 'dark': 'rgb(68, 51, 122)'}, 'text_color': {'light': 'rgb(107, 70, 193)', 'dark': 'rgb(233, 216, 253)'}, 'link_url': 'https://example.com'}` | v2.3.0+ |
 
 ### Featured networks
@@ -415,6 +423,8 @@ This feature is **enabled by default**. To switch it off pass `NEXT_PUBLIC_GAS_T
 | Variable | Type| Description | Compulsoriness  | Default value | Example value | Version |
 | --- | --- | --- | --- | --- | --- | --- |
 | NEXT_PUBLIC_GAS_TRACKER_ENABLED | `boolean` | Set to true to enable "Gas tracker" in the app | Required | `true` | `false` | v1.25.0+ |
+| NEXT_PUBLIC_PRICE_TRACKER_DISABLE | `boolean` | Set to true to disable "Coin price tracker" in the app | Required | `true` | `false` | v1.36.0+ |
+| NEXT_PUBLIC_GAS_TRACKER_UNITS | Array<`usd` \| `gwei`> | Array of units for displaying gas prices on the Gas Tracker page, in the stats snippet on the Home page, and in the top bar. The first value in the array will take priority over the second one in all mentioned views. If only one value is provided, gas prices will be displayed only in that unit. | - | `[ 'usd', 'gwei' ]` | `[ 'gwei' ]` | v1.25.0+ |
 | NEXT_PUBLIC_GAS_TRACKER_UNITS | Array<`usd` \| `gwei`> | Array of units for displaying gas prices on the Gas Tracker page, in the stats snippet on the Home page, and in the top bar. The first value in the array will take priority over the second one in all mentioned views. If only one value is provided, gas prices will be displayed only in that unit. | - | For testnets: `[ 'gwei' ]`, for mainnets: `[ 'usd', 'gwei' ]` | `[ 'gwei' ]` | v1.25.0+ |
 
 &nbsp;
@@ -500,7 +510,7 @@ Ads are enabled by default on all self-hosted instances. If you would like to di
 
 | Variable | Type| Description | Compulsoriness  | Default value | Example value | Version |
 | --- | --- | --- | --- | --- | --- | --- |
-| NEXT_PUBLIC_ROLLUP_TYPE | `'optimistic' \| 'arbitrum' \| 'shibarium' \| 'zkEvm' \| 'zkSync' \| 'scroll'` | Rollup chain type | Required | - | `'optimistic'` | v1.24.0+ |
+| NEXT_PUBLIC_ROLLUP_TYPE | `'optimistic' \| 'arbitrum' \| 'shibarium' \| 'zkEvm' \| 'zkSync' \| 'scroll' \| 'oasys'` | Rollup chain type | Required | - | `'optimistic'` | v1.24.0+ |
 | NEXT_PUBLIC_ROLLUP_L1_BASE_URL | `string` | Blockscout base URL for L1 network. **DEPRECATED** _Use `NEXT_PUBLIC_ROLLUP_PARENT_CHAIN` instead_ | Required | - | `'http://eth-goerli.blockscout.com'` | v1.24.0+ |
 | NEXT_PUBLIC_ROLLUP_L2_WITHDRAWAL_URL | `string` | URL for L2 -> L1 withdrawals (Optimistic stack only) | Required for `optimistic` rollups | - | `https://app.optimism.io/bridge/withdraw` | v1.24.0+ |
 | NEXT_PUBLIC_ROLLUP_STAGE_INDEX | `1 \| 2` | Reflects the maturity and decentralization level of the chain based on [L2BEAT's framework](https://medium.com/l2beat/introducing-stages-a-framework-to-evaluate-rollups-maturity-d290bb22befe). The label will be added to the sidebar according to the provided stage index. Not applicable for testnets. | - | - | `1` | v2.1.0+ |
@@ -624,6 +634,8 @@ Ads are enabled by default on all self-hosted instances. If you would like to di
 | --- | --- | --- | --- | --- | --- | --- |
 | NEXT_PUBLIC_STATS_API_HOST | `string` | Stats API endpoint url | Required | - | `https://stats.services.blockscout.com` | v1.0.x+ |
 | NEXT_PUBLIC_STATS_API_BASE_PATH | `string` | Base path for Stats API endpoint url | - | - | `/poa/core` | v1.29.0+ |
+| NEXT_PUBLIC_EXPERIMENT_VISIBLE | `boolean`| Set to true to enable EXPERIMENT views. | - | - | `true` | v1.38.x+ |
+| NEXT_PUBLIC_EXPERIMENT_API_URL | `string` | TheGraph API endpoint url | - | `http://localhost:8000/subgraphs/name/oasys/bridge` | `https://api.thegraph.com/subgraphs/name/oasys/bridge` | v1.36.x+ |
 
 &nbsp;
 
@@ -1024,5 +1036,43 @@ To obtain the variable values, please refer to the [reCAPTCHA documentation](htt
 
 | Variable | Type| Description | Compulsoriness  | Default value | Example value | Version |
 | --- | --- | --- | --- | --- | --- | --- |
-| NEXT_PUBLIC_RE_CAPTCHA_V3_APP_SITE_KEY | `string` | **DEPRECATED** Google reCAPTCHA v3 site key | - | - | `<your-secret>` | v1.36.x |
-| NEXT_PUBLIC_RE_CAPTCHA_APP_SITE_KEY | `string` | Google reCAPTCHA v2 site key | - | - | `<your-site-key>` | v1.0.x+ |
+| NEXT_PUBLIC_RE_CAPTCHA_V3_APP_SITE_KEY | `string` | **DEPRECATED** Google reCAPTCHA v3 site key | - | - | `<your-secret>` | v1.36.0+ |
+| NEXT_PUBLIC_RE_CAPTCHA_APP_SITE_KEY | `string` | Google reCAPTCHA v2 site key | - | - | `<your-secret>` | v1.0.x+ |
+
+### Custom Banner Images
+
+This feature allows you to display up to three custom banner images in the left navigation bar. Each banner can have its own link URL.
+
+**Note**: When using this feature, you need to add the image domains to the Next.js configuration in `next.config.js`:
+```javascript
+module.exports = {
+  images: {
+    domains: ['your-image-domain.com'],
+  },
+}
+```
+
+| Variable | Type| Description | Compulsoriness  | Default value | Example value | Version |
+| --- | --- | --- | --- | --- | --- | --- |
+| NEXT_PUBLIC_BANNER_IMAGE_URL_1 | `string` | URL for the first banner image. Recommended size: 160x80 pixels. Supported formats: image/jpeg, image/png. The image domain must be configured in next.config.js | Optional | - | `https://example.com/banner1.png` | v1.36.x+ |
+| NEXT_PUBLIC_BANNER_LINK_URL_1 | `string` | URL that the first banner will redirect to when clicked | Optional | `#` | `https://example.com` | v1.36.x+ |
+| NEXT_PUBLIC_BANNER_IMAGE_URL_2 | `string` | URL for the second banner image. Same specifications as the first banner. | Optional | - | `https://example.com/banner2.png` | v1.36.x+ |
+| NEXT_PUBLIC_BANNER_LINK_URL_2 | `string` | URL that the second banner will redirect to when clicked | Optional | `#` | `https://example.com` | v1.36.x+ |
+| NEXT_PUBLIC_BANNER_IMAGE_URL_3 | `string` | URL for the third banner image. Same specifications as the first banner. | Optional | - | `https://example.com/banner3.png` | v1.36.x+ |
+| NEXT_PUBLIC_BANNER_LINK_URL_3 | `string` | URL that the third banner will redirect to when clicked | Optional | `#` | `https://example.com` | v1.36.x+ |
+
+### Header Alert
+
+This feature allows you to display a custom alert banner in the header of the application. The banner can have up to two customizable links (e.g., Explorer URL and Discord URL). The banner will appear prominently in the header when the feature is enabled.
+
+| Variable | Type | Description | Compulsoriness  | Default Value | Example Value | Version |
+| --- | --- | --- | --- | --- | --- | --- |
+| `NEXT_PUBLIC_HEADER_ALERT_ENABLED` | `boolean` | Set to `true` to enable the header alert banner | Required | `false` | `true` | v1.36.0+ |
+| `NEXT_PUBLIC_HEADER_ALERT_EXPLORER_URL` | `string` | URL that the "Explorer" link in the banner will redirect to when clicked | Optional | `#` | `https://example.com` | v1.36.x+ |
+| `NEXT_PUBLIC_HEADER_ALERT_DISCORD_URL` | `string` | URL that the "Discord" link in the banner will redirect to when clicked | Optional | `#` | `https://discord.com` | v1.36.x+ |
+&nbsp;
+
+### Verse token configuration
+| Variable | Type| Description | Compulsoriness  | Default value | Example value | Version |
+| --- | --- | --- | --- | --- | --- | --- |
+| NEXT_PUBLIC_UPDATED_TOKENS | `string` | The URL of the configuration file (in .json format only) or a string representation of the file content. It contains a list of updated tokens to be displayed.| - | - | `https://oasys-blockscout-networks.s3.ap-northeast-1.amazonaws.com/blockscout-updated-tokens.json` \| `{"tokens":[{"address":"0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000","name":"Oasys","symbol":"OAS"},{"address":"0xE1aB220E37AC55A4E2dD5Ba148298A9c09fBD716","name":"Legacy Bridged USDC (Celer)","symbol":"USDC.e-legacy"}]}` | v1.38.x+ |

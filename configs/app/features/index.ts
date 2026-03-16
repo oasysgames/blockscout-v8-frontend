@@ -47,4 +47,5 @@ export { default as validators } from './validators';
 export { default as verifiedTokens } from './verifiedTokens';
 export { default as web3Wallet } from './web3Wallet';
 export { default as xStarScore } from './xStarScore';
+export { default as experiment } from './experiment';
 export { default as zetachain } from './zetachain';

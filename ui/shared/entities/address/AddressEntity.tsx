@@ -5,6 +5,7 @@ import type { AddressParam } from 'types/api/addressParams';
 
 import { route } from 'nextjs/routes';
 
+import config from 'configs/app';
 import { toBech32Address } from 'lib/address/bech32';
 import { useAddressHighlightContext } from 'lib/contexts/addressHighlight';
 import { useSettingsContext } from 'lib/contexts/settings';
@@ -120,7 +121,15 @@ export type ContentProps = Omit<EntityBase.ContentBaseProps, 'text'> & Pick<Enti
 const Content = chakra((props: ContentProps) => {
   const displayedAddress = getDisplayedAddress(props.address, props.altHash);
   const nameTag = props.address.metadata?.tags.find(tag => tag.tagType === 'name')?.name;
-  const nameText = nameTag || props.address.ens_domain_name || props.address.name;
+  let nameText = nameTag || props.address.ens_domain_name || props.address.name;
+
+  // Check if the token address exists in the tokens list
+  if (props.address.hash) {
+    const updatedToken = config.verse.tokens.findByAddress(props.address.hash);
+    if (updatedToken) {
+      nameText = updatedToken.name;
+    }
+  }
 
   const isProxy = props.address.implementations && props.address.implementations.length > 0 && props.address.proxy_type !== 'eip7702';
 

@@ -5,6 +5,8 @@ import type { TokenInfo } from 'types/api/token';
 
 import { route } from 'nextjs/routes';
 
+import config from 'configs/app';
+import { Image } from 'toolkit/chakra/image';
 import { useMultichainContext } from 'lib/contexts/multichain';
 import getChainTooltipText from 'lib/multichain/getChainTooltipText';
 import getIconUrl from 'lib/multichain/getIconUrl';
@@ -62,10 +64,22 @@ const Icon = (props: IconProps) => {
 type ContentProps = Omit<EntityBase.ContentBaseProps, 'text'> & Pick<EntityProps, 'token' | 'jointSymbol' | 'onlySymbol'>;
 
 const Content = chakra((props: ContentProps) => {
+  let symbol = props.token.symbol;
+  let tokenName = props.token.name;
+
+  // Check if the token address exists in the tokens list
+  if (props.token.address_hash) {
+    const updatedToken = config.verse.tokens.findByAddress(props.token.address_hash);
+    if (updatedToken) {
+      tokenName = updatedToken.name;
+      symbol = updatedToken.symbol;
+    }
+  }
+
   const nameString = [
-    !props.onlySymbol && (props.token.name ?? 'Unnamed token'),
-    props.onlySymbol && (props.token.symbol ?? props.token.name ?? 'Unnamed token'),
-    props.token.symbol && props.jointSymbol && !props.onlySymbol && `(${ props.token.symbol })`,
+    !props.onlySymbol && (tokenName ?? 'Unnamed token'),
+    props.onlySymbol && (symbol ?? tokenName ?? 'Unnamed token'),
+    symbol && props.jointSymbol && !props.onlySymbol && `(${ symbol })`,
   ].filter(Boolean).join(' ');
 
   return (
@@ -80,8 +94,16 @@ const Content = chakra((props: ContentProps) => {
 type SymbolProps = Pick<EntityProps, 'token' | 'isLoading' | 'noSymbol' | 'jointSymbol' | 'onlySymbol'>;
 
 const Symbol = (props: SymbolProps) => {
-  const symbol = props.token.symbol;
+  let symbol = props.token.symbol;
 
+  // Check if the token address exists in the tokens list
+  if (props.token.address_hash) {
+    const updatedToken = config.verse.tokens.findByAddress(props.token.address_hash);
+    if (updatedToken) {
+      symbol = updatedToken.symbol;
+    }
+  }
+  
   if (!symbol || props.noSymbol || props.jointSymbol || props.onlySymbol) {
     return null;
   }

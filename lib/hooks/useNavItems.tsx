@@ -207,6 +207,22 @@ export default function useNavItems(): ReturnType {
           ensLookup,
         ].filter(Boolean),
       ];
+    } else if (rollupFeature.isEnabled && rollupFeature.type === 'oasys') {
+      blockchainNavItems = [
+        [
+          txs,
+          internalTxs,
+          rollupDeposits,
+          rollupWithdrawals,
+        ],
+        [
+          blocks,
+          userOps,
+          topAccounts,
+          verifiedContracts,
+          ensLookup,
+        ].filter(Boolean),
+      ];
     } else {
       blockchainNavItems = [
         txs,
@@ -220,7 +236,7 @@ export default function useNavItems(): ReturnType {
         validators,
         verifiedContracts,
         ensLookup,
-        config.features.beaconChain.isEnabled && {
+        rollupFeature.isEnabled && Boolean(config.verse.bridge.hasL2ChainId) && {
           text: 'Deposits',
           nextRoute: { pathname: '/deposits' as const },
           icon: 'arrows/south-east',
@@ -323,6 +339,18 @@ export default function useNavItems(): ReturnType {
         isActive: otherNavItems.flat().some(item => isInternalItem(item) && item.isActive),
         subItems: otherNavItems,
       },
+      config.verse.bridge.isVisible ? {
+        text: 'Bridge',
+        nextRoute: { pathname: '/bridge' as const },
+        icon: 'bridge',
+        isActive: pathname.startsWith('/bridge'),
+      } : null,
+      config.verse.experiment.isVisible ? {
+        text: 'Experiment',
+        nextRoute: { pathname: '/experiment' as const },
+        icon: 'experiment',
+        isActive: pathname.startsWith('/experiment'),
+      } : null,
     ].filter(Boolean);
 
     const accountNavItems: ReturnType['accountNavItems'] = [

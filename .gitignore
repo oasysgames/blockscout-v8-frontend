@@ -62,4 +62,7 @@ yarn-error.log*
 
 # build outputs
 /tools/preset-sync/index.js
+oasys-experiment/design
+oasys-experiment/node_modules
+.idea
 /toolkit/package/dist

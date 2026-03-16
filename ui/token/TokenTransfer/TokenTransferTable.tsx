@@ -3,6 +3,7 @@ import React from 'react';
 import type { TokenInfo, TokenInstance } from 'types/api/token';
 import type { TokenTransfer } from 'types/api/tokenTransfer';
 
+import config from 'configs/app';
 import { AddressHighlightProvider } from 'lib/contexts/addressHighlight';
 import { NFT_TOKEN_TYPE_IDS } from 'lib/token/tokenTypes';
 import { TableBody, TableColumnHeader, TableHeaderSticky, TableRoot, TableRow } from 'toolkit/chakra/table';
@@ -26,6 +27,14 @@ interface Props {
 const TokenTransferTable = ({ data, top, showSocketInfo, showSocketErrorAlert, socketInfoNum, tokenId, isLoading, token, instance }: Props) => {
 
   const tokenType = token.type;
+  let symbol = token?.symbol;
+  // Check if the token address exists in the tokens list
+  if (token?.address_hash) {
+    const updatedToken = config.verse.tokens.findByAddress(token.address_hash);
+    if (updatedToken) {
+      symbol = updatedToken.symbol;
+    }
+  }
 
   return (
     <AddressHighlightProvider>
@@ -43,7 +52,7 @@ const TokenTransferTable = ({ data, top, showSocketInfo, showSocketErrorAlert, s
             }
             { (tokenType === 'ERC-20' || tokenType === 'ERC-1155' || tokenType === 'ERC-404') && (
               <TableColumnHeader width={ tokenType === 'ERC-20' ? '100%' : '50%' } isNumeric>
-                <TruncatedValue value={ `Value ${ token?.symbol || '' }` } w="100%" verticalAlign="middle"/>
+                <TruncatedValue value={ `Value ${ symbol || '' }` } w="100%" verticalAlign="middle"/>
               </TableColumnHeader>
             ) }
           </TableRow>

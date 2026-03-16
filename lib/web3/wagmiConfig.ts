@@ -1,16 +1,19 @@
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 import type { AppKitNetwork } from '@reown/appkit/networks';
+import { Oasys, OasysTestnet } from 'bridge/constants/chains';
 import type { Chain, Transport } from 'viem';
 import { fallback, http } from 'viem';
 import { createConfig } from 'wagmi';
 
 import appConfig from 'configs/app';
 import multichainConfig from 'configs/multichain';
-import { currentChain, parentChain, clusterChains } from 'lib/web3/chains';
+import { currentChain, parentChain } from 'lib/web3/chains';
 
 const feature = appConfig.features.blockchainInteraction;
 
-const chains = [ currentChain, parentChain, ...(clusterChains ?? []) ].filter(Boolean);
+let chains = [ currentChain, parentChain, OasysTestnet ].filter(Boolean);
+chains = (appConfig.verse.bridge.isVisible ? [ currentChain, Oasys, OasysTestnet ] : [ currentChain ]).filter(Boolean);
+// const chains = [ currentChain, parentChain, ...(clusterChains ?? []) ].filter(Boolean);
 
 const getChainTransportFromConfig = (config: typeof appConfig, readOnly?: boolean): Record<string, Transport> => {
   if (!config.chain.id) {
@@ -65,6 +68,9 @@ const wagmi = (() => {
     networks: chains as Array<AppKitNetwork>,
     multiInjectedProviderDiscovery: true,
     transports: {
+      [Oasys.id]: http(),
+      [OasysTestnet.id]: http(),
+      ...(currentChain ? { [currentChain.id]: fallback(appConfig.chain.rpcUrls.map((url) => http(url))) } : {}),
       ...getChainTransportFromConfig(appConfig, false),
       ...(parentChain ? { [parentChain.id]: http() } : {}),
       ...reduceClusterChainsToTransportConfig(false),

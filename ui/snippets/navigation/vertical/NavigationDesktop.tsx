@@ -1,13 +1,16 @@
 import { Flex, Box, VStack } from '@chakra-ui/react';
 import React from 'react';
 
+import config from 'configs/app';
 import { useAppContext } from 'lib/contexts/app';
 import * as cookies from 'lib/cookies';
 import useNavItems, { isGroupItem } from 'lib/hooks/useNavItems';
 import IconSvg from 'ui/shared/IconSvg';
 import useIsAuth from 'ui/snippets/auth/useIsAuth';
 import NetworkLogo from 'ui/snippets/networkMenu/NetworkLogo';
+import NetworkMenu from 'ui/snippets/networkMenu/NetworkMenu';
 
+import Banner from '../../../../oasys-experiment/Banner';
 import NavigationPromoBanner from '../promoBanner/NavigationPromoBanner';
 import RollupStageBadge from '../RollupStageBadge';
 import TestnetBadge from '../TestnetBadge';
@@ -20,13 +23,7 @@ const NavigationDesktop = () => {
   const cookiesString = appProps.cookies;
 
   const isNavBarCollapsedCookie = cookies.get(cookies.NAMES.NAV_BAR_COLLAPSED, cookiesString);
-  let isNavBarCollapsed;
-  if (isNavBarCollapsedCookie === 'true') {
-    isNavBarCollapsed = true;
-  }
-  if (isNavBarCollapsedCookie === 'false') {
-    isNavBarCollapsed = false;
-  }
+  const isNavBarCollapsed = isNavBarCollapsedCookie === null ? true : isNavBarCollapsedCookie === 'true';
 
   const { mainNavItems, accountNavItems } = useNavItems();
 
@@ -58,7 +55,7 @@ const NavigationDesktop = () => {
       borderColor="border.divider"
       px={{ lg: isExpanded ? 6 : 4, xl: isCollapsed ? 4 : 6 }}
       pt={ 12 }
-      pb={ 6 }
+      pb={ 3 }
       width={{ lg: isExpanded ? '229px' : '92px', xl: isCollapsed ? '92px' : '229px' }}
       onClick={ handleContainerClick }
       transitionProperty="width, padding"
@@ -82,6 +79,7 @@ const NavigationDesktop = () => {
         transitionTimingFunction="ease"
       >
         <NetworkLogo isCollapsed={ isCollapsed }/>
+        { config.UI.navigation.showFeaturedNetworksByOldUiFlg && <NetworkMenu isCollapsed={ isCollapsed }/> }
       </Box>
       <Box as="nav" mt={ 6 } w="100%">
         <VStack as="ul" gap="1" alignItems="flex-start">
@@ -102,7 +100,12 @@ const NavigationDesktop = () => {
           </VStack>
         </Box>
       ) }
-      <NavigationPromoBanner isCollapsed={ isCollapsed }/>
+      <Box height="calc(100vh - 700px)" minHeight="0"/>
+      <Box>
+        <Banner/>
+      </Box>
+
+      {/* <NavigationPromoBanner isCollapsed={ isCollapsed }/> */}
       <IconSvg
         name="arrows/east-mini"
         width={ 6 }
